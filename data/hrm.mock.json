@@ -1,0 +1,1065 @@
+[
+  {
+    "employee_id": "E001",
+    "full_name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "phone": "123-456-7890",
+    "current_role": "Senior Backend Engineer",
+    "employment_history": [
+      {
+        "role": "Backend Engineer",
+        "start_date": "2018-04-12",
+        "end_date": "2020-09-01",
+        "responsibilities": "Built internal APIs and microservices."
+      },
+      {
+        "role": "Senior Backend Engineer",
+        "start_date": "2020-09-01",
+        "end_date": null,
+        "responsibilities": "Led migration to microservices. Owns order processing system."
+      }
+    ],
+    "education": "BSc Computer Science, MIT"
+  },
+  {
+    "employee_id": "E002",
+    "full_name": "Michael Lee",
+    "email": "michael.lee@example.com",
+    "phone": "321-654-0987",
+    "current_role": "DevOps Engineer",
+    "employment_history": [
+      {
+        "role": "Systems Administrator",
+        "start_date": "2016-01-01",
+        "end_date": "2019-07-01",
+        "responsibilities": "Monitored Linux servers."
+      }
+    ],
+    "education": "BSc Information Technology, Stanford University"
+  },
+  {
+    "employee_id": "E003",
+    "full_name": "Sofia Ramirez",
+    "email": "sofia.ramirez@example.com",
+    "phone": null,
+    "current_role": "Frontend Developer",
+    "employment_history": [],
+    "education": "BA Design, University of Madrid"
+  },
+  {
+    "employee_id": "E004",
+    "full_name": "Li Wei",
+    "email": "li.wei@example.com",
+    "phone": "555-555-1234",
+    "current_role": "Data Scientist",
+    "employment_history": [
+      {
+        "role": "Junior Data Scientist",
+        "start_date": "2021-03-15",
+        "end_date": null,
+        "responsibilities": "Works on ML models. Mainly NLP and data pipelines."
+      }
+    ],
+    "education": "PhD in Machine Learning, National University of Singapore"
+  },
+  {
+    "employee_id": "E005",
+    "full_name": "Emma Davis",
+    "email": "emma.davis@example.com",
+    "phone": "444-444-9999",
+    "current_role": "QA Engineer",
+    "employment_history": [
+      {
+        "role": "QA Intern",
+        "start_date": "2016-06-01",
+        "end_date": "2017-06-01",
+        "responsibilities": "Manual testing. Basic test scripts."
+      }
+    ],
+    "education": "BSc Software Engineering, University of Toronto"
+  },
+  {
+    "employee_id": "E006",
+    "full_name": "David Brown",
+    "email": "david.brown@example.com",
+    "phone": "555-123-4567",
+    "current_role": "Product Manager",
+    "employment_history": [
+      {
+        "role": "Product Analyst",
+        "start_date": "2017-02-01",
+        "end_date": "2019-08-15",
+        "responsibilities": "Analyzed product performance and customer feedback."
+      },
+      {
+        "role": "Product Manager",
+        "start_date": "2019-08-16",
+        "end_date": null,
+        "responsibilities": "Leads product development and strategy."
+      }
+    ],
+    "education": "MBA, Harvard Business School"
+  },
+  {
+    "employee_id": "E007",
+    "full_name": "Jessica Miller",
+    "email": "jessica.miller@example.com",
+    "phone": "555-987-6543",
+    "current_role": "UX Designer",
+    "employment_history": [
+      {
+        "role": "Junior UX Designer",
+        "start_date": "2019-07-01",
+        "end_date": "2021-12-31",
+        "responsibilities": "Created wireframes and user flows."
+      },
+      {
+        "role": "UX Designer",
+        "start_date": "2022-01-01",
+        "end_date": null,
+        "responsibilities": "Designs user interfaces and experience improvements."
+      }
+    ],
+    "education": "BA Graphic Design, Rhode Island School of Design"
+  },
+  {
+    "employee_id": "E008",
+    "full_name": "James Wilson",
+    "email": "james.wilson@example.com",
+    "phone": "555-222-3333",
+    "current_role": "Senior Frontend Developer",
+    "employment_history": [
+      {
+        "role": "Frontend Developer",
+        "start_date": "2016-04-01",
+        "end_date": "2019-05-01",
+        "responsibilities": "Developed user-facing features."
+      },
+      {
+        "role": "Senior Frontend Developer",
+        "start_date": "2019-05-02",
+        "end_date": null,
+        "responsibilities": "Mentors junior developers and leads frontend projects."
+      }
+    ],
+    "education": "BSc Computer Science, University of Washington"
+  },
+  {
+    "employee_id": "E009",
+    "full_name": "Natalie King",
+    "email": "natalie.king@example.com",
+    "phone": "555-666-7777",
+    "current_role": "HR Specialist",
+    "employment_history": [
+      {
+        "role": "HR Assistant",
+        "start_date": "2018-01-15",
+        "end_date": "2020-01-15",
+        "responsibilities": "Assisted in recruitment and onboarding."
+      },
+      {
+        "role": "HR Specialist",
+        "start_date": "2020-01-16",
+        "end_date": null,
+        "responsibilities": "Manages employee relations and benefits."
+      }
+    ],
+    "education": "BA Human Resources, University of Michigan"
+  },
+  {
+    "employee_id": "E010",
+    "full_name": "Robert Garcia",
+    "email": "robert.garcia@example.com",
+    "phone": "555-444-5555",
+    "current_role": "Marketing Manager",
+    "employment_history": [
+      {
+        "role": "Marketing Coordinator",
+        "start_date": "2017-06-01",
+        "end_date": "2019-07-01",
+        "responsibilities": "Coordinated marketing campaigns."
+      },
+      {
+        "role": "Marketing Manager",
+        "start_date": "2019-07-02",
+        "end_date": null,
+        "responsibilities": "Leads brand strategy and digital marketing."
+      }
+    ],
+    "education": "MBA Marketing, University of Chicago"
+  },
+  {
+    "employee_id": "E011",
+    "full_name": "Anna White",
+    "email": "anna.white@example.com",
+    "phone": "555-888-1111",
+    "current_role": "Software Engineer",
+    "employment_history": [
+      {
+        "role": "Junior Software Engineer",
+        "start_date": "2018-10-01",
+        "end_date": "2020-12-31",
+        "responsibilities": "Worked on internal tools."
+      },
+      {
+        "role": "Software Engineer",
+        "start_date": "2021-01-01",
+        "end_date": null,
+        "responsibilities": "Develops scalable backend services."
+      }
+    ],
+    "education": "BSc Computer Engineering, Georgia Tech"
+  },
+  {
+    "employee_id": "E012",
+    "full_name": "Chris Martinez",
+    "email": "chris.martinez@example.com",
+    "phone": "555-777-8888",
+    "current_role": "Data Analyst",
+    "employment_history": [
+      {
+        "role": "Intern Data Analyst",
+        "start_date": "2019-05-01",
+        "end_date": "2020-08-01",
+        "responsibilities": "Supported data cleaning and reporting."
+      },
+      {
+        "role": "Data Analyst",
+        "start_date": "2020-08-02",
+        "end_date": null,
+        "responsibilities": "Analyzes data trends for business insights."
+      }
+    ],
+    "education": "BSc Statistics, University of California, Berkeley"
+  },
+  {
+    "employee_id": "E013",
+    "full_name": "Karen Young",
+    "email": "karen.young@example.com",
+    "phone": "555-333-2222",
+    "current_role": "Content Strategist",
+    "employment_history": [
+      {
+        "role": "Content Writer",
+        "start_date": "2017-03-01",
+        "end_date": "2019-04-30",
+        "responsibilities": "Produced blog and social media content."
+      },
+      {
+        "role": "Content Strategist",
+        "start_date": "2019-05-01",
+        "end_date": null,
+        "responsibilities": "Develops content strategy across channels."
+      }
+    ],
+    "education": "BA Journalism, New York University"
+  },
+  {
+    "employee_id": "E014",
+    "full_name": "Brian Scott",
+    "email": "brian.scott@example.com",
+    "phone": "555-999-0000",
+    "current_role": "Cybersecurity Analyst",
+    "employment_history": [
+      {
+        "role": "Security Technician",
+        "start_date": "2016-11-01",
+        "end_date": "2018-12-31",
+        "responsibilities": "Monitored network security."
+      },
+      {
+        "role": "Cybersecurity Analyst",
+        "start_date": "2019-01-01",
+        "end_date": null,
+        "responsibilities": "Leads incident response and threat analysis."
+      }
+    ],
+    "education": "BSc Cybersecurity, University of Maryland"
+  },
+  {
+    "employee_id": "E015",
+    "full_name": "Olivia Harris",
+    "email": "olivia.harris@example.com",
+    "phone": "555-111-2222",
+    "current_role": "Sales Manager",
+    "employment_history": [
+      {
+        "role": "Sales Associate",
+        "start_date": "2015-07-01",
+        "end_date": "2018-06-30",
+        "responsibilities": "Managed client accounts and sales pipelines."
+      },
+      {
+        "role": "Sales Manager",
+        "start_date": "2018-07-01",
+        "end_date": null,
+        "responsibilities": "Leads sales team and strategy."
+      }
+    ],
+    "education": "BA Business Administration, University of Texas"
+  },
+  {
+    "employee_id": "E016",
+    "full_name": "Ethan Walker",
+    "email": "ethan.walker@example.com",
+    "phone": "555-555-6666",
+    "current_role": "Mobile Developer",
+    "employment_history": [
+      {
+        "role": "Junior Mobile Developer",
+        "start_date": "2019-09-01",
+        "end_date": "2021-09-01",
+        "responsibilities": "Built Android applications."
+      },
+      {
+        "role": "Mobile Developer",
+        "start_date": "2021-09-02",
+        "end_date": null,
+        "responsibilities": "Develops cross-platform mobile apps."
+      }
+    ],
+    "education": "BSc Software Engineering, University of Waterloo"
+  },
+  {
+    "employee_id": "E017",
+    "full_name": "Megan Wright",
+    "email": "megan.wright@example.com",
+    "phone": "555-777-1234",
+    "current_role": "Technical Writer",
+    "employment_history": [
+      {
+        "role": "Junior Technical Writer",
+        "start_date": "2018-05-01",
+        "end_date": "2020-05-01",
+        "responsibilities": "Created product documentation."
+      },
+      {
+        "role": "Technical Writer",
+        "start_date": "2020-05-02",
+        "end_date": null,
+        "responsibilities": "Maintains technical manuals and guides."
+      }
+    ],
+    "education": "BA English, University of Edinburgh"
+  },
+  {
+    "employee_id": "E018",
+    "full_name": "Jason Evans",
+    "email": "jason.evans@example.com",
+    "phone": "555-333-7777",
+    "current_role": "Business Analyst",
+    "employment_history": [
+      {
+        "role": "Business Analyst Intern",
+        "start_date": "2017-08-01",
+        "end_date": "2018-12-31",
+        "responsibilities": "Supported project documentation and analysis."
+      },
+      {
+        "role": "Business Analyst",
+        "start_date": "2019-01-01",
+        "end_date": null,
+        "responsibilities": "Leads requirements gathering and process improvement."
+      }
+    ],
+    "education": "MBA, Wharton School"
+  },
+  {
+    "employee_id": "E019",
+    "full_name": "Isabella Nelson",
+    "email": "isabella.nelson@example.com",
+    "phone": "555-222-4444",
+    "current_role": "Graphic Designer",
+    "employment_history": [
+      {
+        "role": "Junior Graphic Designer",
+        "start_date": "2016-10-01",
+        "end_date": "2018-10-01",
+        "responsibilities": "Designed marketing materials."
+      },
+      {
+        "role": "Graphic Designer",
+        "start_date": "2018-10-02",
+        "end_date": null,
+        "responsibilities": "Creates brand visuals and campaigns."
+      }
+    ],
+    "education": "BA Fine Arts, Pratt Institute"
+  },
+  {
+    "employee_id": "E020",
+    "full_name": "Daniel Carter",
+    "email": "daniel.carter@example.com",
+    "phone": "555-666-3333",
+    "current_role": "Cloud Architect",
+    "employment_history": [
+      {
+        "role": "Cloud Engineer",
+        "start_date": "2017-03-01",
+        "end_date": "2020-03-01",
+        "responsibilities": "Maintained cloud infrastructure."
+      },
+      {
+        "role": "Cloud Architect",
+        "start_date": "2020-03-02",
+        "end_date": null,
+        "responsibilities": "Designs scalable cloud solutions."
+      }
+    ],
+    "education": "MSc Computer Science, University of Illinois"
+  },
+  {
+    "employee_id": "E021",
+    "full_name": "Sophia Mitchell",
+    "email": "sophia.mitchell@example.com",
+    "phone": "555-111-3333",
+    "current_role": "QA Lead",
+    "employment_history": [
+      {
+        "role": "QA Engineer",
+        "start_date": "2015-09-01",
+        "end_date": "2019-09-01",
+        "responsibilities": "Executed test plans and reported bugs."
+      },
+      {
+        "role": "QA Lead",
+        "start_date": "2019-09-02",
+        "end_date": null,
+        "responsibilities": "Leads QA team and strategy."
+      }
+    ],
+    "education": "BSc Computer Science, University of Edinburgh"
+  },
+  {
+    "employee_id": "E022",
+    "full_name": "Matthew Perez",
+    "email": "matthew.perez@example.com",
+    "phone": "555-444-7777",
+    "current_role": "Full Stack Developer",
+    "employment_history": [
+      {
+        "role": "Junior Developer",
+        "start_date": "2016-11-01",
+        "end_date": "2018-12-31",
+        "responsibilities": "Developed internal tools."
+      },
+      {
+        "role": "Full Stack Developer",
+        "start_date": "2019-01-01",
+        "end_date": null,
+        "responsibilities": "Works on frontend and backend development."
+      }
+    ],
+    "education": "BSc Computer Science, University of Texas"
+  },
+  {
+    "employee_id": "E023",
+    "full_name": "Grace Bell",
+    "email": "grace.bell@example.com",
+    "phone": "555-777-9999",
+    "current_role": "Database Administrator",
+    "employment_history": [
+      {
+        "role": "DB Administrator",
+        "start_date": "2018-01-01",
+        "end_date": null,
+        "responsibilities": "Maintains and optimizes databases."
+      }
+    ],
+    "education": "BSc Information Systems, University of Arizona"
+  },
+  {
+    "employee_id": "E024",
+    "full_name": "Joshua Turner",
+    "email": "joshua.turner@example.com",
+    "phone": "555-222-1111",
+    "current_role": "Network Engineer",
+    "employment_history": [
+      {
+        "role": "Network Technician",
+        "start_date": "2015-06-01",
+        "end_date": "2017-12-31",
+        "responsibilities": "Maintained network equipment."
+      },
+      {
+        "role": "Network Engineer",
+        "start_date": "2018-01-01",
+        "end_date": null,
+        "responsibilities": "Designs and troubleshoots networks."
+      }
+    ],
+    "education": "BSc Electrical Engineering, Purdue University"
+  },
+  {
+    "employee_id": "E025",
+    "full_name": "Chloe Green",
+    "email": "chloe.green@example.com",
+    "phone": "555-888-3333",
+    "current_role": "Technical Support Specialist",
+    "employment_history": [
+      {
+        "role": "Support Technician",
+        "start_date": "2017-04-01",
+        "end_date": "2019-03-31",
+        "responsibilities": "Provided technical support to clients."
+      },
+      {
+        "role": "Technical Support Specialist",
+        "start_date": "2019-04-01",
+        "end_date": null,
+        "responsibilities": "Handles escalated support issues."
+      }
+    ],
+    "education": "AAS Computer Networking, Community College"
+  },
+  {
+    "employee_id": "E026",
+    "full_name": "Ryan Adams",
+    "email": "ryan.adams@example.com",
+    "phone": "555-666-8888",
+    "current_role": "AI Researcher",
+    "employment_history": [
+      {
+        "role": "Research Assistant",
+        "start_date": "2018-09-01",
+        "end_date": "2020-09-01",
+        "responsibilities": "Assisted with AI model development."
+      },
+      {
+        "role": "AI Researcher",
+        "start_date": "2020-09-02",
+        "end_date": null,
+        "responsibilities": "Leads projects in computer vision."
+      }
+    ],
+    "education": "PhD Artificial Intelligence, Carnegie Mellon University"
+  },
+  {
+    "employee_id": "E027",
+    "full_name": "Lily Roberts",
+    "email": "lily.roberts@example.com",
+    "phone": "555-999-4444",
+    "current_role": "HR Manager",
+    "employment_history": [
+      {
+        "role": "HR Specialist",
+        "start_date": "2014-02-01",
+        "end_date": "2018-05-01",
+        "responsibilities": "Handled recruitment and benefits."
+      },
+      {
+        "role": "HR Manager",
+        "start_date": "2018-05-02",
+        "end_date": null,
+        "responsibilities": "Manages HR team and policies."
+      }
+    ],
+    "education": "MBA Human Resources, Cornell University"
+  },
+  {
+    "employee_id": "E028",
+    "full_name": "Andrew Clark",
+    "email": "andrew.clark@example.com",
+    "phone": "555-123-9999",
+    "current_role": "Lead Software Engineer",
+    "employment_history": [
+      {
+        "role": "Software Engineer",
+        "start_date": "2013-08-01",
+        "end_date": "2017-11-01",
+        "responsibilities": "Developed core software components."
+      },
+      {
+        "role": "Lead Software Engineer",
+        "start_date": "2017-11-02",
+        "end_date": null,
+        "responsibilities": "Leads software engineering teams."
+      }
+    ],
+    "education": "MSc Computer Science, University of Cambridge"
+  },
+  {
+    "employee_id": "E029",
+    "full_name": "Natalia Sanchez",
+    "email": "natalia.sanchez@example.com",
+    "phone": "555-777-2222",
+    "current_role": "Digital Marketing Specialist",
+    "employment_history": [
+      {
+        "role": "Marketing Intern",
+        "start_date": "2018-06-01",
+        "end_date": "2019-06-01",
+        "responsibilities": "Assisted with SEO and social media."
+      },
+      {
+        "role": "Digital Marketing Specialist",
+        "start_date": "2019-06-02",
+        "end_date": null,
+        "responsibilities": "Manages digital campaigns and analytics."
+      }
+    ],
+    "education": "BA Marketing, University of Barcelona"
+  },
+  {
+    "employee_id": "E030",
+    "full_name": "Benjamin Hughes",
+    "email": "benjamin.hughes@example.com",
+    "phone": "555-444-6666",
+    "current_role": "Systems Engineer",
+    "employment_history": [
+      {
+        "role": "Systems Analyst",
+        "start_date": "2015-10-01",
+        "end_date": "2017-09-30",
+        "responsibilities": "Analyzed system requirements."
+      },
+      {
+        "role": "Systems Engineer",
+        "start_date": "2017-10-01",
+        "end_date": null,
+        "responsibilities": "Designs and maintains IT systems."
+      }
+    ],
+    "education": "BSc Information Systems, University of Melbourne"
+  },
+  {
+    "employee_id": "E031",
+    "full_name": "Mia Turner",
+    "email": "mia.turner@example.com",
+    "phone": "555-999-1111",
+    "current_role": "Software Tester",
+    "employment_history": [
+      {
+        "role": "QA Intern",
+        "start_date": "2019-03-01",
+        "end_date": "2020-03-01",
+        "responsibilities": "Tested software modules."
+      },
+      {
+        "role": "Software Tester",
+        "start_date": "2020-03-02",
+        "end_date": null,
+        "responsibilities": "Performs automated and manual testing."
+      }
+    ],
+    "education": "BSc Computer Science, University of Sydney"
+  },
+  {
+    "employee_id": "E032",
+    "full_name": "Evelyn Campbell",
+    "email": "evelyn.campbell@example.com",
+    "phone": "555-555-4444",
+    "current_role": "Technical Project Manager",
+    "employment_history": [
+      {
+        "role": "Project Coordinator",
+        "start_date": "2017-09-01",
+        "end_date": "2019-10-01",
+        "responsibilities": "Assisted in project scheduling."
+      },
+      {
+        "role": "Technical Project Manager",
+        "start_date": "2019-10-02",
+        "end_date": null,
+        "responsibilities": "Leads software project delivery."
+      }
+    ],
+    "education": "MBA Project Management, University of Manchester"
+  },
+  {
+    "employee_id": "E033",
+    "full_name": "Jacob Edwards",
+    "email": "jacob.edwards@example.com",
+    "phone": "555-222-7777",
+    "current_role": "Security Engineer",
+    "employment_history": [
+      {
+        "role": "Security Analyst",
+        "start_date": "2016-08-01",
+        "end_date": "2019-08-01",
+        "responsibilities": "Monitored security threats."
+      },
+      {
+        "role": "Security Engineer",
+        "start_date": "2019-08-02",
+        "end_date": null,
+        "responsibilities": "Implements security protocols."
+      }
+    ],
+    "education": "BSc Cybersecurity, University of California"
+  },
+  {
+    "employee_id": "E034",
+    "full_name": "Ella Murphy",
+    "email": "ella.murphy@example.com",
+    "phone": "555-111-9999",
+    "current_role": "Frontend Developer",
+    "employment_history": [
+      {
+        "role": "Junior Frontend Developer",
+        "start_date": "2018-07-01",
+        "end_date": "2020-07-01",
+        "responsibilities": "Worked on UI components."
+      },
+      {
+        "role": "Frontend Developer",
+        "start_date": "2020-07-02",
+        "end_date": null,
+        "responsibilities": "Develops responsive web applications."
+      }
+    ],
+    "education": "BSc Computer Science, University of Leeds"
+  },
+  {
+    "employee_id": "E035",
+    "full_name": "Samuel Walker",
+    "email": "samuel.walker@example.com",
+    "phone": "555-333-5555",
+    "current_role": "Database Developer",
+    "employment_history": [
+      {
+        "role": "Junior Database Developer",
+        "start_date": "2017-01-01",
+        "end_date": "2019-01-01",
+        "responsibilities": "Developed stored procedures."
+      },
+      {
+        "role": "Database Developer",
+        "start_date": "2019-01-02",
+        "end_date": null,
+        "responsibilities": "Designs database schemas and queries."
+      }
+    ],
+    "education": "BSc Computer Science, University of Edinburgh"
+  },
+  {
+    "employee_id": "E036",
+    "full_name": "Victoria Reed",
+    "email": "victoria.reed@example.com",
+    "phone": "555-777-1111",
+    "current_role": "Business Development Manager",
+    "employment_history": [
+      {
+        "role": "Sales Executive",
+        "start_date": "2015-04-01",
+        "end_date": "2018-04-01",
+        "responsibilities": "Generated leads and closed deals."
+      },
+      {
+        "role": "Business Development Manager",
+        "start_date": "2018-04-02",
+        "end_date": null,
+        "responsibilities": "Manages partnerships and client relationships."
+      }
+    ],
+    "education": "MBA, INSEAD"
+  },
+  {
+    "employee_id": "E037",
+    "full_name": "Nathan Hughes",
+    "email": "nathan.hughes@example.com",
+    "phone": "555-999-3333",
+    "current_role": "Software Architect",
+    "employment_history": [
+      {
+        "role": "Software Engineer",
+        "start_date": "2012-01-01",
+        "end_date": "2016-01-01",
+        "responsibilities": "Developed backend services."
+      },
+      {
+        "role": "Software Architect",
+        "start_date": "2016-01-02",
+        "end_date": null,
+        "responsibilities": "Designs software architecture and standards."
+      }
+    ],
+    "education": "MSc Software Engineering, Stanford University"
+  },
+  {
+    "employee_id": "E038",
+    "full_name": "Amelia Morgan",
+    "email": "amelia.morgan@example.com",
+    "phone": "555-222-9999",
+    "current_role": "Data Engineer",
+    "employment_history": [
+      {
+        "role": "Junior Data Engineer",
+        "start_date": "2018-11-01",
+        "end_date": "2020-11-01",
+        "responsibilities": "Built ETL pipelines."
+      },
+      {
+        "role": "Data Engineer",
+        "start_date": "2020-11-02",
+        "end_date": null,
+        "responsibilities": "Develops and maintains data infrastructure."
+      }
+    ],
+    "education": "BSc Computer Science, University of Toronto"
+  },
+  {
+    "employee_id": "E039",
+    "full_name": "Logan Foster",
+    "email": "logan.foster@example.com",
+    "phone": "555-444-1111",
+    "current_role": "System Administrator",
+    "employment_history": [
+      {
+        "role": "Junior SysAdmin",
+        "start_date": "2016-05-01",
+        "end_date": "2018-05-01",
+        "responsibilities": "Managed user accounts and servers."
+      },
+      {
+        "role": "System Administrator",
+        "start_date": "2018-05-02",
+        "end_date": null,
+        "responsibilities": "Maintains company infrastructure."
+      }
+    ],
+    "education": "BSc Information Technology, University of Florida"
+  },
+  {
+    "employee_id": "E040",
+    "full_name": "Grace Butler",
+    "email": "grace.butler@example.com",
+    "phone": "555-777-4444",
+    "current_role": "Marketing Analyst",
+    "employment_history": [
+      {
+        "role": "Marketing Assistant",
+        "start_date": "2017-01-01",
+        "end_date": "2019-01-01",
+        "responsibilities": "Collected market data and reports."
+      },
+      {
+        "role": "Marketing Analyst",
+        "start_date": "2019-01-02",
+        "end_date": null,
+        "responsibilities": "Analyzes marketing campaign performance."
+      }
+    ],
+    "education": "BA Marketing, University of Pennsylvania"
+  },
+  {
+    "employee_id": "E041",
+    "full_name": "Evan Collins",
+    "email": "evan.collins@example.com",
+    "phone": "555-111-4444",
+    "current_role": "Technical Lead",
+    "employment_history": [
+      {
+        "role": "Software Developer",
+        "start_date": "2014-05-01",
+        "end_date": "2017-05-01",
+        "responsibilities": "Developed backend services."
+      },
+      {
+        "role": "Technical Lead",
+        "start_date": "2017-05-02",
+        "end_date": null,
+        "responsibilities": "Leads development teams."
+      }
+    ],
+    "education": "BSc Computer Science, University of Oxford"
+  },
+  {
+    "employee_id": "E042",
+    "full_name": "Hannah Brooks",
+    "email": "hannah.brooks@example.com",
+    "phone": "555-222-3333",
+    "current_role": "Data Scientist",
+    "employment_history": [
+      {
+        "role": "Data Analyst",
+        "start_date": "2017-08-01",
+        "end_date": "2019-09-01",
+        "responsibilities": "Analyzed datasets for insights."
+      },
+      {
+        "role": "Data Scientist",
+        "start_date": "2019-09-02",
+        "end_date": null,
+        "responsibilities": "Builds predictive models."
+      }
+    ],
+    "education": "MSc Data Science, University College London"
+  },
+  {
+    "employee_id": "E043",
+    "full_name": "Oliver Green",
+    "email": "oliver.green@example.com",
+    "phone": "555-333-1111",
+    "current_role": "Cloud Engineer",
+    "employment_history": [
+      {
+        "role": "Cloud Support Engineer",
+        "start_date": "2018-03-01",
+        "end_date": "2020-03-01",
+        "responsibilities": "Provided cloud support."
+      },
+      {
+        "role": "Cloud Engineer",
+        "start_date": "2020-03-02",
+        "end_date": null,
+        "responsibilities": "Designs cloud infrastructure."
+      }
+    ],
+    "education": "BSc Computer Engineering, University of Waterloo"
+  },
+  {
+    "employee_id": "E044",
+    "full_name": "Chloe Edwards",
+    "email": "chloe.edwards@example.com",
+    "phone": "555-444-2222",
+    "current_role": "Product Owner",
+    "employment_history": [
+      {
+        "role": "Business Analyst",
+        "start_date": "2016-06-01",
+        "end_date": "2018-06-01",
+        "responsibilities": "Gathered requirements."
+      },
+      {
+        "role": "Product Owner",
+        "start_date": "2018-06-02",
+        "end_date": null,
+        "responsibilities": "Defines product vision."
+      }
+    ],
+    "education": "MBA, University of Chicago"
+  },
+  {
+    "employee_id": "E045",
+    "full_name": "Mason Kelly",
+    "email": "mason.kelly@example.com",
+    "phone": "555-555-3333",
+    "current_role": "Scrum Master",
+    "employment_history": [
+      {
+        "role": "Project Coordinator",
+        "start_date": "2017-07-01",
+        "end_date": "2019-07-01",
+        "responsibilities": "Supported Agile ceremonies."
+      },
+      {
+        "role": "Scrum Master",
+        "start_date": "2019-07-02",
+        "end_date": null,
+        "responsibilities": "Facilitates Agile processes."
+      }
+    ],
+    "education": "BSc Information Systems, Northeastern University"
+  },
+  {
+    "employee_id": "E046",
+    "full_name": "Sophia Price",
+    "email": "sophia.price@example.com",
+    "phone": "555-666-4444",
+    "current_role": "UX Designer",
+    "employment_history": [
+      {
+        "role": "Junior UX Designer",
+        "start_date": "2018-04-01",
+        "end_date": "2020-04-01",
+        "responsibilities": "Created wireframes and prototypes."
+      },
+      {
+        "role": "UX Designer",
+        "start_date": "2020-04-02",
+        "end_date": null,
+        "responsibilities": "Improves user experience."
+      }
+    ],
+    "education": "BA Design, Rhode Island School of Design"
+  },
+  {
+    "employee_id": "E047",
+    "full_name": "Liam Bennett",
+    "email": "liam.bennett@example.com",
+    "phone": "555-777-5555",
+    "current_role": "Mobile Developer",
+    "employment_history": [
+      {
+        "role": "Junior Mobile Developer",
+        "start_date": "2017-02-01",
+        "end_date": "2019-02-01",
+        "responsibilities": "Built mobile app features."
+      },
+      {
+        "role": "Mobile Developer",
+        "start_date": "2019-02-02",
+        "end_date": null,
+        "responsibilities": "Develops iOS and Android apps."
+      }
+    ],
+    "education": "BSc Software Engineering, University of Washington"
+  },
+  {
+    "employee_id": "E048",
+    "full_name": "Isabella Fisher",
+    "email": "isabella.fisher@example.com",
+    "phone": "555-888-6666",
+    "current_role": "Content Strategist",
+    "employment_history": [
+      {
+        "role": "Content Writer",
+        "start_date": "2016-09-01",
+        "end_date": "2018-09-01",
+        "responsibilities": "Created marketing content."
+      },
+      {
+        "role": "Content Strategist",
+        "start_date": "2018-09-02",
+        "end_date": null,
+        "responsibilities": "Plans content strategies."
+      }
+    ],
+    "education": "BA Communications, New York University"
+  },
+  {
+    "employee_id": "E049",
+    "full_name": "Ethan Cooper",
+    "email": "ethan.cooper@example.com",
+    "phone": "555-999-7777",
+    "current_role": "Network Engineer",
+    "employment_history": [
+      {
+        "role": "Network Technician",
+        "start_date": "2015-01-01",
+        "end_date": "2017-01-01",
+        "responsibilities": "Maintained network hardware."
+      },
+      {
+        "role": "Network Engineer",
+        "start_date": "2017-01-02",
+        "end_date": null,
+        "responsibilities": "Designs and troubleshoots networks."
+      }
+    ],
+    "education": "BSc Network Engineering, Georgia Tech"
+  },
+  {
+    "employee_id": "E050",
+    "full_name": "Madison Scott",
+    "email": "madison.scott@example.com",
+    "phone": "555-111-2222",
+    "current_role": "Technical Writer",
+    "employment_history": [
+      {
+        "role": "Junior Technical Writer",
+        "start_date": "2017-03-01",
+        "end_date": "2019-03-01",
+        "responsibilities": "Created documentation for APIs."
+      },
+      {
+        "role": "Technical Writer",
+        "start_date": "2019-03-02",
+        "end_date": null,
+        "responsibilities": "Writes technical manuals and guides."
+      }
+    ],
+    "education": "BA English, University of Michigan"
+  }
+]

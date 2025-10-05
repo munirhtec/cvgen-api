@@ -1,0 +1,252 @@
+[
+  {
+    "employee_id": "E001",
+    "business_context": "eCommerce, Microservices",
+    "team_contributions": ["Improved data processing efficiency by 20%", "Documented API guidelines"]
+  },
+  {
+    "employee_id": "E002",
+    "business_context": "DevOps and SRE",
+    "team_contributions": ["Standardized terraform modules", "Introduced monitoring alerts"]
+  },
+  {
+    "employee_id": "E003",
+    "business_context": "Frontend UX",
+    "team_contributions": ["Enhanced accessibility features", "Fixed navigation bar bug"]
+  },
+  {
+    "employee_id": "E004",
+    "business_context": "NLP and ML",
+    "team_contributions": ["Improved training pipeline speed by 30%", "Implemented BERT-based models"]
+  },
+  {
+    "employee_id": "E005",
+    "business_context": "Quality Assurance",
+    "team_contributions": ["Expanded test coverage", "Found critical login bug"]
+  },
+  {
+    "employee_id": "E006",
+    "business_context": "Data Engineering",
+    "team_contributions": ["Built ETL pipelines", "Optimized data ingestion times"]
+  },
+  {
+    "employee_id": "E007",
+    "business_context": "Mobile Development",
+    "team_contributions": ["Led UI redesign for iOS and Android apps", "Improved app launch speed"]
+  },
+  {
+    "employee_id": "E008",
+    "business_context": "Systems Engineering",
+    "team_contributions": ["Migrated servers to new data center", "Reduced infrastructure costs by 15%"]
+  },
+  {
+    "employee_id": "E009",
+    "business_context": "Security",
+    "team_contributions": ["Performed security audit", "Implemented vulnerability patches"]
+  },
+  {
+    "employee_id": "E010",
+    "business_context": "Marketing Analytics",
+    "team_contributions": ["Optimized campaign targeting", "Increased ROI by 50%"]
+  },
+  {
+    "employee_id": "E011",
+    "business_context": "AI and NLP",
+    "team_contributions": ["Built customer support chatbot", "Increased user engagement by 20%"]
+  },
+  {
+    "employee_id": "E012",
+    "business_context": "Cloud Engineering",
+    "team_contributions": ["Migrated legacy systems to AWS", "Reduced downtime during migration"]
+  },
+  {
+    "employee_id": "E013",
+    "business_context": "Technical Writing",
+    "team_contributions": ["Overhauled internal documentation", "Improved documentation clarity"]
+  },
+  {
+    "employee_id": "E014",
+    "business_context": "UX Design",
+    "team_contributions": ["Redesigned onboarding flow", "Reduced drop-off rates"]
+  },
+  {
+    "employee_id": "E015",
+    "business_context": "Database Management",
+    "team_contributions": ["Expanded data warehouse", "Optimized query performance"]
+  },
+  {
+    "employee_id": "E016",
+    "business_context": "Backend Engineering",
+    "team_contributions": ["Integrated payment gateway", "Improved transaction reliability"]
+  },
+  {
+    "employee_id": "E017",
+    "business_context": "Frontend Development",
+    "team_contributions": ["Built customer support portal", "Improved portal responsiveness"]
+  },
+  {
+    "employee_id": "E018",
+    "business_context": "System Integration",
+    "team_contributions": ["Connected CRM and ERP systems", "Ensured data sync accuracy"]
+  },
+  {
+    "employee_id": "E019",
+    "business_context": "DevOps",
+    "team_contributions": ["Configured API gateway", "Reduced latency by 20%"]
+  },
+  {
+    "employee_id": "E020",
+    "business_context": "Product Management",
+    "team_contributions": ["Defined training portal roadmap", "Achieved high adoption rates"]
+  },
+  {
+    "employee_id": "E021",
+    "business_context": "Data Science",
+    "team_contributions": ["Created real-time analytics dashboards", "Reduced data latency"]
+  },
+  {
+    "employee_id": "E022",
+    "business_context": "Systems Administration",
+    "team_contributions": ["Led legacy system shutdown", "Maintained zero downtime"]
+  },
+  {
+    "employee_id": "E023",
+    "business_context": "Digital Marketing",
+    "team_contributions": ["Launched social media ads", "Increased engagement rates"]
+  },
+  {
+    "employee_id": "E024",
+    "business_context": "Software Engineering",
+    "team_contributions": ["Refactored internal tools", "Improved UX and performance"]
+  },
+  {
+    "employee_id": "E025",
+    "business_context": "HR Management",
+    "team_contributions": ["Deployed new HRIS system", "Increased user satisfaction"]
+  },
+  {
+    "employee_id": "E026",
+    "business_context": "AI Research",
+    "team_contributions": ["Developed computer vision models", "Improved model accuracy"]
+  },
+  {
+    "employee_id": "E027",
+    "business_context": "Recruitment",
+    "team_contributions": ["Automated recruitment workflows", "Reduced time-to-hire"]
+  },
+  {
+    "employee_id": "E028",
+    "business_context": "SEO",
+    "team_contributions": ["Boosted organic traffic", "Improved keyword rankings"]
+  },
+  {
+    "employee_id": "E029",
+    "business_context": "Embedded Systems",
+    "team_contributions": ["Developed IoT firmware", "Improved device uptime"]
+  },
+  {
+    "employee_id": "E030",
+    "business_context": "Product Management",
+    "team_contributions": ["Launched loyalty program", "Increased customer retention"]
+  },
+  {
+    "employee_id": "E031",
+    "business_context": "Data Science",
+    "team_contributions": ["Created fraud detection models", "Improved detection rates"]
+  },
+  {
+    "employee_id": "E032",
+    "business_context": "Frontend Development",
+    "team_contributions": ["Redesigned corporate website", "Improved accessibility compliance"]
+  },
+  {
+    "employee_id": "E033",
+    "business_context": "Systems Engineering",
+    "team_contributions": ["Enhanced backup systems", "Achieved near-perfect backup success"]
+  },
+  {
+    "employee_id": "E034",
+    "business_context": "UX Design",
+    "team_contributions": ["Built customer feedback portal", "Increased user participation"]
+  },
+  {
+    "employee_id": "E035",
+    "business_context": "Business Analysis",
+    "team_contributions": ["Automated reporting processes", "Improved report accuracy"]
+  },
+  {
+    "employee_id": "E036",
+    "business_context": "HR",
+    "team_contributions": ["Created orientation materials", "Improved new hire satisfaction"]
+  },
+  {
+    "employee_id": "E037",
+    "business_context": "Backend Engineering",
+    "team_contributions": ["Implemented API rate limiting", "Reduced service incidents"]
+  },
+  {
+    "employee_id": "E038",
+    "business_context": "Cloud Engineering",
+    "team_contributions": ["Optimized cloud costs", "Reduced monthly expenses"]
+  },
+  {
+    "employee_id": "E039",
+    "business_context": "AI Engineering",
+    "team_contributions": ["Enhanced chatbot language support", "Improved user satisfaction"]
+  },
+  {
+    "employee_id": "E040",
+    "business_context": "Data Governance",
+    "team_contributions": ["Defined governance policies", "Increased compliance scores"]
+  },
+  {
+    "employee_id": "E041",
+    "business_context": "Mobile Development",
+    "team_contributions": ["Implemented push notifications", "Improved open rates"]
+  },
+  {
+    "employee_id": "E042",
+    "business_context": "Data Science",
+    "team_contributions": ["Built real-time fraud alerts", "Improved alert accuracy"]
+  },
+  {
+    "employee_id": "E043",
+    "business_context": "Cloud Engineering",
+    "team_contributions": ["Automated infrastructure provisioning", "Reduced setup times"]
+  },
+  {
+    "employee_id": "E044",
+    "business_context": "Product Management",
+    "team_contributions": ["Led product roadmap", "Increased stakeholder satisfaction"]
+  },
+  {
+    "employee_id": "E045",
+    "business_context": "Agile Coaching",
+    "team_contributions": ["Facilitated agile adoption", "Improved team velocity"]
+  },
+  {
+    "employee_id": "E046",
+    "business_context": "UX Design",
+    "team_contributions": ["Conducted usability studies", "Improved user satisfaction"]
+  },
+  {
+    "employee_id": "E047",
+    "business_context": "Mobile Development",
+    "team_contributions": ["Built cross-platform apps", "Reduced crash rates"]
+  },
+  {
+    "employee_id": "E048",
+    "business_context": "Content Strategy",
+    "team_contributions": ["Developed content strategy", "Increased engagement"]
+  },
+  {
+    "employee_id": "E049",
+    "business_context": "Network Engineering",
+    "team_contributions": ["Upgraded network infrastructure", "Improved uptime"]
+  },
+  {
+    "employee_id": "E050",
+    "business_context": "Technical Writing",
+    "team_contributions": ["Updated technical documentation", "Improved completeness"]
+  }
+]
