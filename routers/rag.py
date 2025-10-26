@@ -15,9 +15,9 @@ async def load_and_build_faiss_index():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/preview")
-async def preview_index():
+async def preview_index(k: int):
     try:
-        preview = rag_faiss.preview_index()
+        preview = rag_faiss.preview_index(k)
         return {"index_preview": preview}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
