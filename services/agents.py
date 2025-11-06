@@ -138,17 +138,12 @@ CURRENT CV:
 FEEDBACK TO ADDRESS:
 {json.dumps(draft.get('feedback', []), indent=2)}
 
-REFINEMENT RULES:
-1. Fix all issues mentioned in feedback
-2. Enhance brief if generic - make it specific using actual role and experience data
-3. Ensure relevantProjects are complete with businessDomain, projectDescription, techStack, roleAndResponsibilities
-4. Extract and add any missing technologies to techStack arrays
-5. Verify skills are properly categorized
-6. Add English language if senior role and missing
-7. Use ONLY information from original data - no hallucination
-8. Improve clarity and professionalism of existing text
+REFINEMENT INSTRUCTIONS:
+1. Address feedback first (highest priority), most priority has latest entry in the array, one before it if exists has 50% priority, 3rd has 20%
+2. Improve clarity and professionalism
+3. Return complete CV JSON matching schema
 
-Return complete refined CV JSON matching the schema. No markdown, no explanations."""
+No markdown, no explanations."""
 
         result = get_llm_response(prompt)
         try:
@@ -156,10 +151,9 @@ Return complete refined CV JSON matching the schema. No markdown, no explanation
             content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
             draft_json = json.loads(content)
             draft["cv"] = CVSchema(**draft_json).model_dump()
-            draft["feedback"] = []  # Clear feedback after refinement
+            # draft["feedback"] = []  # Clear feedback after refinement
         except Exception as e:
             print(f"Refinement error: {e}")
-            # Keep existing draft if refinement fails
             draft["cv"] = draft.get("cv", {})
         
         if "feedback" not in draft:
