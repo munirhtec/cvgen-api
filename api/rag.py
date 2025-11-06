@@ -15,7 +15,7 @@ async def load_and_build_faiss_index():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/preview")
-async def preview_index(k: int):
+async def preview_index(k: int = Query(10, description="Number of records to preview")):
     try:
         preview = rag_faiss.preview_index(k)
         return {"index_preview": preview}
@@ -26,7 +26,7 @@ async def preview_index(k: int):
 async def get_employee(query: str = Query(..., description="Employee ID, full name or email")):
     employee = rag_faiss.find_employee(query)
     if employee:
-        return {"employee": employee}
+        return employee
     else:
         raise HTTPException(status_code=404, detail="Employee not found")
 
@@ -35,8 +35,8 @@ class QueryRequest(BaseModel):
     top_k: int = 5
 
 class EmployeeSuggestion(BaseModel):
-    record: Dict  # Consider defining a detailed model if needed
-    similarity: float  # Similarity percentage
+    record: Dict
+    similarity: float #percentage
 
 class SuggestionsResponse(BaseModel):
     suggestions: List[EmployeeSuggestion]
@@ -45,7 +45,7 @@ class SuggestionsResponse(BaseModel):
 async def get_suggestions(request: QueryRequest):
     try:
         results = rag_faiss.search(request.job_description, request.top_k)
-        # results is expected as list of dicts with 'record' and 'similarity' keys
+
         return {"suggestions": results}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

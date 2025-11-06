@@ -1,224 +1,243 @@
-import os
-import json
+from difflib import SequenceMatcher, get_close_matches
+import os, json
 from collections import defaultdict
-from typing import List, Dict, Tuple
-import faiss
-import numpy as np
+import faiss, numpy as np
 from sentence_transformers import SentenceTransformer
 
-# Load embedding model once (stronger model for higher semantic alignment)
 model = SentenceTransformer("all-mpnet-base-v2")
-
-# In-memory FAISS components
 index = None
-records = []  # List of full employee records
-vectors = []  # List of normalized embedding vectors
+records, vectors = [], []
 
-
-def load_json(path: str) -> List[Dict]:
-    if not os.path.exists(path):
-        print(f"Warning: {path} not found, skipping.")
+def load_json(path):
+    if not os.path.exists(path): 
         return []
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8") as f: 
         return json.load(f)
 
+def normalize_string(s):
+    return (s or "").strip().lower().replace("-", "").replace("_", "")
 
-def merge_records_on_the_fly(
-    hrm_path="data/hrm.mock.json",
-    xops_path="data/xops.mock.json",
-    custom_path="data/custom.mock.json"
-) -> List[Dict]:
+def find_best_match(rec, unified):
+    """
+    Find the best matching employee in unified dict using multiple heuristics:
+    - Exact/normalized employee_id
+    - Email match
+    - Phone match
+    - Full name fuzzy match
+    Returns key in unified if found, else None.
+    """
+    eid_norm = normalize_string(rec.get("employee_id", ""))
+    email = (rec.get("email") or "").lower()
+    phone = (rec.get("phone") or "").lower()
+    full_name_norm = normalize_string(rec.get("full_name", ""))
+
+    # Try normalized employee_id
+    if eid_norm in unified:
+        return eid_norm
+
+    # Try exact email
+    for k, u in unified.items():
+        if u.get("email", "").lower() == email and email:
+            return k
+
+    # Try exact phone
+    for k, u in unified.items():
+        if u.get("phone", "").lower() == phone and phone:
+            return k
+
+    # Try fuzzy full_name match
+    names = [normalize_string(u.get("full_name", "")) for u in unified.values()]
+    matches = get_close_matches(full_name_norm, names, n=1, cutoff=0.8)
+    if matches:
+        # Return key corresponding to the matched name
+        for k, u in unified.items():
+            if normalize_string(u.get("full_name", "")) == matches[0]:
+                return k
+
+    return None
+
+def merge_records_on_the_fly(hrm_path="data/hrm.json", xops_path="data/xops.json", custom_path="data/custom.json"):
     hrm = load_json(hrm_path)
     xops = load_json(xops_path)
     custom = load_json(custom_path)
-
     unified = defaultdict(dict)
 
+    # Load HRM as base
     for rec in hrm:
-        eid = rec.get("employee_id")
-        if eid:
-            unified[eid].update(rec)
+        eid_norm = normalize_string(rec.get("employee_id", ""))
+        unified[eid_norm].update(rec)
 
+    # Merge xOPS projects
     for rec in xops:
-        eid = rec.get("employee_id")
-        if eid:
-            if "work_experience" not in unified[eid]:
-                unified[eid]["work_experience"] = []
-            unified[eid]["work_experience"].append({
-                "project_id": rec.get("project_id", ""),
-                "project_name": rec.get("project_name", ""),
-                "role": rec.get("role", ""),
-                "responsibilities": rec.get("responsibilities", ""),
-                "performance_metrics": rec.get("performance_metrics", {})
+        key = find_best_match(rec, unified)
+        if not key:
+            # Create new entry if no match
+            key = normalize_string(rec.get("employee_id", "new_" + str(len(unified)+1)))
+        unified[key].setdefault("projects", [])
+        for proj in rec.get("projects", []):
+            unified[key]["projects"].append({
+                "project_id": proj.get("project_id", ""),
+                "project_name": proj.get("project_name", "") or "Unnamed Project",
+                "role": proj.get("role", "Unknown role"),
+                "responsibilities": proj.get("responsibilities", ""),
+                "performance_metrics": proj.get("performance_metrics", {})
             })
 
+    # Merge custom records (skills, endorsements, business context)
     for rec in custom:
-        eid = rec.get("employee_id")
-        if eid:
-            if "business_context" not in unified[eid]:
-                unified[eid]["business_context"] = rec.get("business_context", "")
-            if "endorsements" not in unified[eid]:
-                unified[eid]["endorsements"] = rec.get("endorsements", [])
+        key = find_best_match(rec, unified)
+        if not key:
+            key = normalize_string(rec.get("employee_id", "new_" + str(len(unified)+1)))
+        unified[key].setdefault("endorsements", [])
+        unified[key].setdefault("skills", [])
+        unified[key]["business_context"] = rec.get("business_context", unified[key].get("business_context", ""))
+        unified[key]["endorsements"].extend(rec.get("endorsements", []))
+        unified[key]["skills"].extend(rec.get("skills", []))
 
-    for eid, rec in unified.items():
-        rec.setdefault("full_name", "")
-        rec.setdefault("current_role", "")
+    # Build unified work_experience in chronological order
+    for key, rec in unified.items():
+        rec.setdefault("full_name", "Unknown")
+        rec.setdefault("current_role", "Unknown")
         rec.setdefault("business_context", "")
         rec.setdefault("endorsements", [])
-        rec.setdefault("work_experience", [])
+        rec.setdefault("skills", [])
         rec.setdefault("employment_history", [])
         rec.setdefault("education", "")
+        rec.setdefault("projects", [])
+        rec.setdefault("work_experience", [])
+
+        work_exp = []
+
+        # Add employment history
+        for job in rec.get("employment_history", []):
+            work_exp.append({
+                "type": "employment",
+                "role": job.get("role", "Unknown role"),
+                "organization": job.get("organization", "Unknown"),
+                "start_date": job.get("start_date"),
+                "end_date": job.get("end_date"),
+                "responsibilities": job.get("responsibilities", "")
+            })
+
+        # Add projects
+        for proj in rec.get("projects", []):
+            work_exp.append({
+                "type": "project",
+                "project_id": proj.get("project_id", ""),
+                "project_name": proj.get("project_name", ""),
+                "role": proj.get("role", ""),
+                "responsibilities": proj.get("responsibilities", ""),
+                "performance_metrics": proj.get("performance_metrics", {})
+            })
+
+        # Sort work_experience by start_date if available
+        work_exp.sort(key=lambda x: x.get("start_date") or "9999-12-31")
+        rec["work_experience"] = work_exp
 
     return list(unified.values())
 
+def generate_record_summary(rec):
+    s = []
+    if rec.get("current_role"):
+        s.append(f"{rec['current_role']} experienced in {rec.get('business_context','')}.")
+    for xp in rec.get("work_experience", []):
+        if xp.get("project_name") or xp.get("responsibilities"):
+            s.append(f"Worked on '{xp.get('project_name','')}' project. {xp.get('responsibilities','')}")
+    for job in rec.get("employment_history", []):
+        s.append(f"Previously held role as {job.get('role','')}. {job.get('responsibilities','')}")
+    if rec.get("education"):
+        s.append(f"Holds degree: {rec['education']}.")
+    return " ".join(s).strip().lower()
 
-def generate_record_summary(record: Dict) -> str:
-    """
-    Generate a JD-style summary from an employee record for better semantic similarity.
-    """
-    summary = []
-
-    name = record.get("full_name", "")
-    role = record.get("current_role", "")
-    context = record.get("business_context", "")
-    education = record.get("education", "")
-    if role:
-        summary.append(f"{role} experienced in {context}.")
-
-    if record.get("work_experience"):
-        for xp in record["work_experience"]:
-            proj = xp.get("project_name", "")
-            responsibilities = xp.get("responsibilities", "")
-            if proj or responsibilities:
-                summary.append(f"Worked on '{proj}' project. {responsibilities}")
-
-    if record.get("employment_history"):
-        for job in record["employment_history"]:
-            job_role = job.get("role", "")
-            responsibilities = job.get("responsibilities", "")
-            summary.append(f"Previously held role as {job_role}. {responsibilities}")
-
-    if education:
-        summary.append(f"Holds degree: {education}.")
-
-    return " ".join(summary).strip().lower()
-
-
-def serialize_record(record: Dict, mode: str = "summary") -> str:
-    """
-    Convert a record into an embedding-ready string.
-    Modes:
-    - "summary": natural language summary (better similarity)
-    - "detailed": labeled field format (good for debugging)
-    """
+def serialize_record(rec, mode="summary"):
     if mode == "detailed":
         parts = [
-            f"Name: {record.get('full_name', '')}",
-            f"Role: {record.get('current_role', '')}",
-            f"Business context: {record.get('business_context', '')}",
-            "Endorsements: " + ", ".join(record.get("endorsements", [])),
-            "Roles: " + ", ".join(x.get("role", "") for x in record.get("work_experience", [])),
-            "Projects: " + ", ".join(x.get("project_name", "") for x in record.get("work_experience", [])),
-            f"Education: {record.get('education', '')}"
+            f"Name: {rec.get('full_name','')}",
+            f"Role: {rec.get('current_role','')}",
+            f"Business context: {rec.get('business_context','')}",
+            "Endorsements: " + ", ".join(rec.get("endorsements", [])),
+            "Skills: " + ", ".join(rec.get("skills", [])),
+            "Roles: " + ", ".join(x.get("role", "") for x in rec.get("work_experience", [])),
+            "Projects: " + ", ".join(x.get("project_name", "") for x in rec.get("work_experience", [])),
+            f"Education: {rec.get('education','')}"
         ]
         return " | ".join(parts).lower()
-    else:
-        return generate_record_summary(record)
+    return generate_record_summary(rec)
 
-
-def vectorize_text(text: str) -> np.ndarray:
-    """Embed text to vector using the SentenceTransformer model."""
+def vectorize_text(text):
     return model.encode([text])[0]
 
+def normalize(vec):
+    return vec if np.linalg.norm(vec) == 0 else vec / np.linalg.norm(vec)
 
-def normalize(vec: np.ndarray) -> np.ndarray:
-    """Normalize a vector to unit length."""
-    norm = np.linalg.norm(vec)
-    return vec if norm == 0 else vec / norm
-
-
-def build_index(records_list: List[Dict], mode: str = "summary"):
-    """
-    Build FAISS index using normalized vectors from serialized records.
-    """
+def build_index(records_list, mode="summary"):
     global index, vectors, records
-    vectors = []
-    records = []
-
-    for record in records_list:
-        text_blob = serialize_record(record, mode)
-        vec = normalize(vectorize_text(text_blob))
+    vectors, records = [], []
+    for rec in records_list:
+        vec = normalize(vectorize_text(serialize_record(rec, mode)))
         vectors.append(vec)
-        records.append(record)
-
+        records.append(rec)
     if not vectors:
         raise ValueError("No vectors to index.")
-
-    dim = len(vectors[0])
-    index = faiss.IndexFlatIP(dim)  # Use inner product on normalized vectors = cosine sim
+    index = faiss.IndexFlatIP(len(vectors[0]))
     index.add(np.array(vectors).astype("float32"))
 
-
-def search_similar(query: str, top_k: int = 3) -> List[Tuple[int, float]]:
-    """
-    Search for top_k most similar employee records for the given query.
-    Returns list of (index, similarity_score) tuples.
-    """
+def search_similar(query, top_k=3):
     if index is None:
         raise ValueError("FAISS index not initialized.")
-
     q_vec = normalize(vectorize_text(query)).astype("float32").reshape(1, -1)
     scores, indices = index.search(q_vec, top_k)
+    return [(int(idx), float(scores[0][i])) for i, idx in enumerate(indices[0]) if idx != -1]
+
+def search_with_scores(query, top_k=5):
     return [
-        (int(idx), float(scores[0][i]))
-        for i, idx in enumerate(indices[0])
-        if idx != -1
+        {"record": records[idx], "similarity": (score + 1) / 2 * 100} 
+        for idx, score in search_similar(query, top_k)
     ]
 
-
-def search_with_scores(query: str, top_k: int = 5) -> List[Dict]:
-    """
-    Return top_k records with similarity scores converted to percentage (0-100%).
-    """
-    results = []
-    sims = search_similar(query, top_k)
-    for idx, score in sims:
-        rec = records[idx]
-        similarity_pct = (score + 1) / 2 * 100  # Normalize [-1,1] to [0,100]
-        results.append({
-            "record": rec,
-            "similarity": similarity_pct
-        })
-    return results
-
-
-def search(query: str, top_k: int = 5) -> List[Dict]:
-    """
-    Public search API for retrieving top_k most similar records.
-    """
+def search(query, top_k=5):
     if index is None or not records:
-        raise RuntimeError("Index is not built or records are empty.")
+        raise RuntimeError("Index not built or records empty.")
     return search_with_scores(query, top_k)
 
-
-def get_records_by_indices(indices: List[int]) -> List[Dict]:
+def get_records_by_indices(indices):
     return [records[i] for i in indices]
 
-
-def preview_index(num_records: int = 5) -> List[Dict]:
+def preview_index(num_records=5):
     return records[:num_records] if records else []
 
+def find_employee(query, min_score=0.4):
+    """
+    Find an employee by ID, name, email, or phone, allowing typos and partial matches.
+    Substring matches are prioritized over similarity ratio.
+    min_score: minimum similarity for fuzzy match (0-1)
+    """
+    q_norm = normalize_string(query)
+    best_match = None
+    best_score = 0
 
-def find_employee(query: str) -> Dict:
-    """
-    Search in-memory records by employee_id, full_name, or email (case-insensitive).
-    """
-    query_lower = query.lower()
     for rec in records:
-        if (
-            rec.get("employee_id", "").lower() == query_lower
-            or rec.get("full_name", "").lower() == query_lower
-            or rec.get("email", "").lower() == query_lower
-        ):
-            return rec
-    return None
+        for field in ["employee_id", "full_name", "email", "phone"]:
+            val_norm = normalize_string(rec.get(field, ""))
+
+            if not val_norm:
+                continue
+
+            # Direct substring match first
+            if q_norm in val_norm:
+                return rec  # exact or partial substring found
+
+            # Token-level match: check if any query token is in value
+            q_tokens = q_norm.split()
+            val_tokens = val_norm.split()
+            token_overlap = sum(1 for t in q_tokens if any(t in vt for vt in val_tokens))
+            if token_overlap / max(len(q_tokens), 1) > 0.5:
+                return rec
+
+            # Fallback to SequenceMatcher similarity
+            score = SequenceMatcher(None, q_norm, val_norm).ratio()
+            if score > best_score and score >= min_score:
+                best_score = score
+                best_match = rec
+
+    return best_match

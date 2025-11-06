@@ -1,0 +1,52 @@
+[
+  {
+    "employee_id": "001",
+    "business_context": "FinTech",
+    "team_contributions": "Improved transaction throughput by 20%"
+  },
+  {
+    "employee_id": "002",
+    "business_context": "Cloud Services",
+    "team_contributions": "Reduced CI/CD deployment times"
+  },
+  {
+    "employee_id": "003",
+    "business_context": "Data Analytics",
+    "team_contributions": ""
+  },
+  {
+    "employee_id": "004",
+    "business_context": "Software QA",
+    "team_contributions": "Enhanced automated test coverage"
+  },
+  {
+    "employee_id": "005",
+    "business_context": "Artificial Intelligence",
+    "team_contributions": "Optimized ML model inference time"
+  },
+  {
+    "employee_id": "006",
+    "business_context": "Web Development",
+    "team_contributions": "Improved website loading speed"
+  },
+  {
+    "employee_id": "007",
+    "business_context": "ERP Systems",
+    "team_contributions": ""
+  },
+  {
+    "employee_id": "008",
+    "business_context": "Networking",
+    "team_contributions": "Implemented VPN and firewall rules"
+  },
+  {
+    "employee_id": "009",
+    "business_context": "Cloud Solutions",
+    "team_contributions": "Migrated legacy apps to cloud"
+  },
+  {
+    "employee_id": "010",
+    "business_context": "Cybersecurity",
+    "team_contributions": "Developed company-wide security policies"
+  }
+]

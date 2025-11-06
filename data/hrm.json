@@ -1,0 +1,179 @@
+[
+  {
+    "employee_id": "0044",
+    "full_name": "Alice Johnson",
+    "email": "alice.johnson@dummy.com",
+    "phone": "+1-555-0101",
+    "current_role": "Senior Software Engineer",
+    "employment_history": [
+      {
+        "role": "Software Engineer",
+        "start_date": "2018-03-01",
+        "end_date": "2020-06-30",
+        "responsibilities": "Developed backend APIs, collaborated on frontend modules"
+      },
+      {
+        "role": "Junior Developer",
+        "start_date": "2016-01-15",
+        "end_date": "2018-02-28",
+        "responsibilities": "Wrote unit tests, fixed bugs, code reviews"
+      }
+    ],
+    "education": "BSc Computer Science"
+  },
+  {
+    "employee_id": "002",
+    "full_name": "Bob Smith",
+    "email": "bob.smith@dummy.com",
+    "phone": "+1-555-0102",
+    "current_role": "DevOps Engineer",
+    "employment_history": [
+      {
+        "role": "DevOps Engineer",
+        "start_date": "2019-05-01",
+        "end_date": "Present",
+        "responsibilities": "Managed CI/CD pipelines, cloud infra (AWS/GCP)"
+      }
+    ],
+    "education": "MSc Information Systems"
+  },
+  {
+    "employee_id": "003",
+    "full_name": "Carol Lee",
+    "email": "carol.lee@dummy.com",
+    "phone": "",
+    "current_role": "Data Engineer",
+    "employment_history": [],
+    "education": "BSc Data Science"
+  },
+  {
+    "employee_id": "004",
+    "full_name": "David O'Neil",
+    "email": "david.oneil@dummy.com",
+    "phone": "+1-555-0104",
+    "current_role": "QA Engineer",
+    "employment_history": [
+      {
+        "role": "QA Analyst",
+        "start_date": "2017-04-01",
+        "end_date": "2019-12-31",
+        "responsibilities": "Performed manual testing, wrote test scripts"
+      }
+    ],
+    "education": "BSc Software Engineering"
+  },
+  {
+    "employee_id": "005",
+    "full_name": "Eva Martín",
+    "email": "eva.martin@dummy.com",
+    "phone": "+1-555-0105",
+    "current_role": "AI Engineer",
+    "employment_history": [
+      {
+        "role": "Machine Learning Intern",
+        "start_date": "2019-06-01",
+        "end_date": "2020-05-31",
+        "responsibilities": "Built ML models for predictive analytics"
+      }
+    ],
+    "education": "MSc Artificial Intelligence"
+  },
+  {
+    "employee_id": "006",
+    "full_name": "Frank Zhang",
+    "email": "frank.zhang@dummy.com",
+    "phone": "+1-555-0106",
+    "current_role": "Fullstack Developer",
+    "employment_history": [
+      {
+        "role": "Frontend Developer",
+        "start_date": "2015-01-01",
+        "end_date": "2017-12-31",
+        "responsibilities": "Developed responsive UI"
+      },
+      {
+        "role": "Backend Developer",
+        "start_date": "2018-01-01",
+        "end_date": "Present",
+        "responsibilities": "Implemented REST APIs, database schemas"
+      }
+    ],
+    "education": "BSc Computer Engineering"
+  },
+  {
+    "employee_id": "007",
+    "full_name": "Grace Hopper",
+    "email": "grace.hopper@dummy.com",
+    "phone": "+1-555-0107",
+    "current_role": "",
+    "employment_history": [
+      {
+        "role": "Systems Analyst",
+        "start_date": "2016-07-01",
+        "end_date": "2018-06-30",
+        "responsibilities": "Analyzed system requirements"
+      }
+    ],
+    "education": "MSc Systems Engineering"
+  },
+  {
+    "employee_id": "008",
+    "full_name": "Henry Adams",
+    "email": "henry.adams@dummy.com",
+    "phone": "+1-555-0108",
+    "current_role": "Network Engineer",
+    "employment_history": [
+      {
+        "role": "Network Admin",
+        "start_date": "2014-01-01",
+        "end_date": "2017-12-31",
+        "responsibilities": "Maintained LAN/WAN, configured routers"
+      },
+      {
+        "role": "Network Engineer",
+        "start_date": "2018-01-01",
+        "end_date": "Present",
+        "responsibilities": "Designed network topology, implemented security"
+      }
+    ],
+    "education": "BSc Network Engineering"
+  },
+  {
+    "employee_id": "009",
+    "full_name": "Irene Chen",
+    "email": "irene.chen@dummy.com",
+    "phone": "+1-555-0109",
+    "current_role": "Cloud Engineer",
+    "employment_history": [
+      {
+        "role": "Cloud Developer",
+        "start_date": "2017-03-01",
+        "end_date": "2020-06-30",
+        "responsibilities": "Developed cloud apps"
+      }
+    ],
+    "education": "MSc Cloud Computing"
+  },
+  {
+    "employee_id": "010",
+    "full_name": "Jack Black",
+    "email": "jack.black@dummy.com",
+    "phone": "+1-555-0110",
+    "current_role": "Security Engineer",
+    "employment_history": [
+      {
+        "role": "Security Analyst",
+        "start_date": "2015-05-01",
+        "end_date": "2018-08-31",
+        "responsibilities": "Monitored security incidents"
+      },
+      {
+        "role": "Security Engineer",
+        "start_date": "2018-09-01",
+        "end_date": "Present",
+        "responsibilities": "Implemented security protocols"
+      }
+    ],
+    "education": "BSc Cybersecurity"
+  }
+]

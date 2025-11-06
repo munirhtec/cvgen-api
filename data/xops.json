@@ -1,0 +1,121 @@
+[
+  {
+    "employee_id": "001",
+    "projects": [
+      {
+        "project_id": "P1001",
+        "project_name": "Payment Gateway",
+        "role": "Backend Developer",
+        "responsibilities": "Developed APIs for payment processing",
+        "performance_metrics": "Delivered on time, minor bug backlog"
+      },
+      {
+        "project_id": "P1002",
+        "project_name": "Mobile App",
+        "role": "Frontend Developer",
+        "responsibilities": "UI enhancements, optimized load time",
+        "performance_metrics": "Improved app speed by 15%"
+      }
+    ]
+  },
+  {
+    "employee_id": "002",
+    "projects": [
+      {
+        "project_id": "P1003",
+        "project_name": "CI/CD Pipeline",
+        "role": "DevOps Specialist",
+        "responsibilities": "Automated builds & deployments",
+        "performance_metrics": ""
+      }
+    ]
+  },
+  {
+    "employee_id": "003",
+    "projects": []
+  },
+  {
+    "employee_id": "004",
+    "projects": [
+      {
+        "project_id": "P1004",
+        "project_name": "Testing Suite",
+        "role": "QA Enginer",
+        "responsibilities": "Implemented automated test scripts",
+        "performance_metrics": "Reduced bug backlog by 25%"
+      }
+    ]
+  },
+  {
+    "employee_id": "005",
+    "projects": [
+      {
+        "project_id": "P1005",
+        "project_name": "ML Model Deployment",
+        "role": "AI Developer",
+        "responsibilities": "Deployed ML models for predictions",
+        "performance_metrics": "Model accuracy 92%"
+      }
+    ]
+  },
+  {
+    "employee_id": "006",
+    "projects": [
+      {
+        "project_id": "P1006",
+        "project_name": "E-commerce Website",
+        "role": "Fullstack Engineer",
+        "responsibilities": "Designed front & backend",
+        "performance_metrics": "Customer feedback improved 20%"
+      }
+    ]
+  },
+  {
+    "employee_id": "007",
+    "projects": [
+      {
+        "project_id": "P1007",
+        "project_name": "ERP Integration",
+        "role": "Sys Analyst",
+        "responsibilities": "Integrated ERP modules",
+        "performance_metrics": ""
+      }
+    ]
+  },
+  {
+    "employee_id": "008",
+    "projects": [
+      {
+        "project_id": "P1008",
+        "project_name": "Corporate Network",
+        "role": "Network Eng",
+        "responsibilities": "Secured corporate network",
+        "performance_metrics": "No major outages"
+      }
+    ]
+  },
+  {
+    "employee_id": "009",
+    "projects": [
+      {
+        "project_id": "P1009",
+        "project_name": "Cloud Migration",
+        "role": "Cloud Developer",
+        "responsibilities": "Migrated legacy systems to cloud",
+        "performance_metrics": "Downtime <1%"
+      }
+    ]
+  },
+  {
+    "employee_id": "010",
+    "projects": [
+      {
+        "project_id": "P1010",
+        "project_name": "Security Framework",
+        "role": "Security Analyst",
+        "responsibilities": "Audited and enhanced security protocols",
+        "performance_metrics": "Passed ISO 27001 audit"
+      }
+    ]
+  }
+]

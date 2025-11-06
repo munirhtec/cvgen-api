@@ -1,7 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
 
-
 # ---------- Synthetic Input Schemas ----------
 class EmploymentHistoryItem(BaseModel):
     start_date: str
