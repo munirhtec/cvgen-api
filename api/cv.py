@@ -1,12 +1,13 @@
 import copy
+
+from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException
 from typing import Dict
 from services.rag_faiss import find_employee
-from services.agents import DraftingAgent, ReviewAgent, RefinementAgent  # import from your other file
+from services.agents import DraftingAgent, ReviewAgent, RefinementAgent
 
 router = APIRouter()
 pipelines: Dict[str, "CVPipeline"] = {}
-
 
 class CVPipeline:
     def __init__(self, employee_record):
@@ -89,14 +90,17 @@ def refine_cv(employee_id: str):
         raise HTTPException(status_code=404, detail="No active pipeline")
     return pipeline.refine()
 
+class FeedbackRequest(BaseModel):
+    employee_id: str
+    feedback: str
 
-@router.post("/feedback/{employee_id}")
-def submit_feedback(employee_id: str, feedback: str):
-    pipeline = pipelines.get(employee_id)
+@router.post("/feedback")
+def submit_feedback(request: FeedbackRequest):
+    pipeline = pipelines.get(request.employee_id)
     if not pipeline:
         raise HTTPException(status_code=404, detail="No active pipeline")
-    pipeline.add_feedback(feedback)
-    return {"message": "Feedback applied", "draft": pipeline.current_draft}
+    pipeline.add_feedback(request.feedback)
+    return {"success": True, "message": "Feedback applied", "draft": pipeline.current_draft}
 
 
 @router.post("/reset/{employee_id}")
@@ -105,4 +109,4 @@ def reset_cv(employee_id: str):
     if not pipeline:
         raise HTTPException(status_code=404, detail="No active pipeline")
     pipeline.reset()
-    return {"message": "Pipeline reset"}
+    return {"success": True, "message": "Pipeline reset"}
