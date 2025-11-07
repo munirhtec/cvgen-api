@@ -90,7 +90,13 @@ Return only valid JSON matching the schema. No markdown, no explanations."""
         except Exception as e:
             print(f"Draft generation error: {e}")
             draft = empty_cv
-        return {"cv": draft.model_dump(), "feedback": []}
+        
+        # Feedback history is empty initially
+        feedback_history = []  
+        feedback = []  # No feedback initially
+        last_feedback = ""  # No feedback initially
+        
+        return {"cv": draft.model_dump(), "lastFeedback": last_feedback, "feedbackHistory": feedback_history}
 
 class ReviewAgent:
     def review(self, draft):
@@ -122,7 +128,17 @@ Return empty array [] if CV is good."""
         except Exception as e:
             print(f"Review error: {e}")
             feedback = []
-        draft["feedback"] = feedback
+        
+        # If feedback is returned as empty, we don't want to append an empty list
+        if feedback:
+            feedback_history = draft.get("feedbackHistory", [])
+            feedback_history.append(feedback)  # Append feedback (not an empty list)
+        
+        # Overwrite last feedback with the latest feedback
+        last_feedback = feedback[-1] if feedback else ""  # Only overwrite if feedback exists
+
+        draft["feedbackHistory"] = feedback_history  # Append to feedback history
+        draft["lastFeedback"] = last_feedback  # Overwrite last feedback
         return draft
 
 class RefinementAgent:
@@ -151,11 +167,60 @@ No markdown, no explanations."""
             content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
             draft_json = json.loads(content)
             draft["cv"] = CVSchema(**draft_json).model_dump()
-            draft["feedback"] = []  # Clear feedback after refinement
         except Exception as e:
             print(f"Refinement error: {e}")
             draft["cv"] = draft.get("cv", {})
+
+        # Append to feedback history
+        if draft.get('feedback'):
+            feedback_history = draft.get('feedbackHistory', [])
+            feedback_history.append(draft['feedback'])  # Append the new feedback
+
+        # Overwrite the last feedback with the most recent feedback
+        last_feedback = draft.get('feedback', [])[-1] if draft.get('feedback') else ""  # Overwrite with latest feedback
+
+        draft["lastFeedback"] = last_feedback
+        draft["feedbackHistory"] = feedback_history  # Append feedback history
+        return draft
+
+class RefinementAgent:
+    def refine(self, draft, employee_record):
+        prompt = f"""Refine CV draft based on feedback and original data:
+
+ORIGINAL DATA:
+{employee_record}
+
+CURRENT CV:
+{json.dumps(draft['cv'], indent=2)}
+
+FEEDBACK TO ADDRESS:
+{json.dumps(draft.get('feedback', []), indent=2)}
+
+REFINEMENT INSTRUCTIONS:
+1. Address feedback first (highest priority), most priority has latest entry in the array, one before it if exists has 50% priority, 3rd has 20%
+2. Improve clarity and professionalism
+3. Return complete CV JSON matching schema
+
+No markdown, no explanations."""
+
+        result = get_llm_response(prompt)
+        try:
+            content = result.choices[0].message.content
+            content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
+            draft_json = json.loads(content)
+            draft["cv"] = CVSchema(**draft_json).model_dump()
+        except Exception as e:
+            print(f"Refinement error: {e}")
+            draft["cv"] = draft.get("cv", {})
+
+        # Append to feedback history
+        feedback_history = draft.get('feedbackHistory', [])
+        feedback_history.append(draft.get('feedback', []))
         
-        if "feedback" not in draft:
-            draft["feedback"] = []
+        # Overwrite the last feedback with the most recent feedback
+        last_feedback = draft.get('feedback', [])[-1] if draft.get('feedback') else ""  # Overwrite with latest feedback
+
+        draft["lastFeedback"] = last_feedback
+        draft["feedbackHistory"] = feedback_history  # Append feedback history
+
         return draft
