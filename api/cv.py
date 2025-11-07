@@ -1,5 +1,4 @@
 import copy
-
 from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException
 from typing import Dict
@@ -51,17 +50,18 @@ class CVPipeline:
 
         self.current_draft = self.refinement_agent.refine(self.current_draft, self.original_record)
 
-
     def reset(self):
         self.current_draft = None
         self.feedback_history = []
 
 
+# FastAPI routes
 @router.post("/start/{employee_query}")
 def start_cv(employee_query: str):
     employee = find_employee(employee_query)
     if not employee:
         raise HTTPException(status_code=404, detail="Employee not found")
+    
     pipeline = CVPipeline(employee)
     pipelines[str(employee["employee_id"])] = pipeline
     return {"message": "Draft created", "employee_id": pipeline.employee_id, "draft": pipeline.draft()}
@@ -89,6 +89,7 @@ def refine_cv(employee_id: str):
     if not pipeline:
         raise HTTPException(status_code=404, detail="No active pipeline")
     return pipeline.refine()
+
 
 class FeedbackRequest(BaseModel):
     employee_id: str

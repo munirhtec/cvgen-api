@@ -151,7 +151,7 @@ No markdown, no explanations."""
             content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
             draft_json = json.loads(content)
             draft["cv"] = CVSchema(**draft_json).model_dump()
-            # draft["feedback"] = []  # Clear feedback after refinement
+            draft["feedback"] = []  # Clear feedback after refinement
         except Exception as e:
             print(f"Refinement error: {e}")
             draft["cv"] = draft.get("cv", {})
