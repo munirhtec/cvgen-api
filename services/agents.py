@@ -38,23 +38,14 @@ def cv_to_json(cv: CVSchema) -> str:
 class DraftingAgent:
     def generate(self, employee_record):
         empty_cv = CVSchema(
-            personalInformation=PersonalInformation(
-                fullName="",
-                position=[],
-                education="",
-                email="example@example.com"
-            ),
+            personalInformation=PersonalInformation(fullName="", position=[], education="", email="example@example.com"),
             brief="",
-            professionalSkills=ProfessionalSkills(
-                coreLanguages=[],
-                frameworksAndTools=[]
-            ),
+            professionalSkills=ProfessionalSkills(coreLanguages=[], frameworksAndTools=[]),
             languages=[],
             hobbies=[],
             relevantProjects=[]
         )
-        
-        prompt = f"""Convert employee data to CV JSON following these rules:
+        prompt = f"""Convert employee data to CV JSON:
 
 INPUT DATA:
 {employee_record}
@@ -81,69 +72,45 @@ Return only valid JSON matching the schema. No markdown, no explanations."""
         result = get_llm_response(prompt)
         try:
             content = result.choices[0].message.content
-        except Exception:
-            content = str(result)
-        content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
-        try:
+            content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
             draft_json = json.loads(content)
-            draft = CVSchema(**draft_json)
+            draft = CVSchema(**draft_json).model_dump()
         except Exception as e:
             print(f"Draft generation error: {e}")
-            draft = empty_cv
-        
-        # Feedback history is empty initially
-        feedback_history = []  
-        feedback = []  # No feedback initially
-        last_feedback = ""  # No feedback initially
-        
-        return {"cv": draft.model_dump(), "lastFeedback": last_feedback, "feedbackHistory": feedback_history}
+            draft = empty_cv.model_dump()
+
+        return {"cv": draft, "feedbackHistory": [], "lastFeedback": "", "feedback": []}
 
 class ReviewAgent:
-    def review(self, draft):
-        prompt = f"""Review this CV draft for quality and completeness:
+    def review(self, draft, feedback):
+        """Apply feedback directly to the CV draft."""
+        prompt = f"""You are a CV expert. 
 
 CV DRAFT:
 {json.dumps(draft['cv'], indent=2)}
 
-REVIEW CHECKLIST:
-1. Is brief compelling and 2-3 sentences? (not generic or empty)
-2. Are relevantProjects populated with actual work history?
-3. Are skills properly categorized in professionalSkills?
-4. Is personalInformation complete (name, position, education, email)?
-5. For senior positions, is English language included?
-6. Are projectDescriptions clear and specific?
-7. Are techStacks identified for each project?
+FEEDBACK:
+{feedback}
 
-Return JSON array of issues found:
-[{{"field": "path.to.field", "issue": "specific problem", "severity": "high|medium|low"}}]
+Your task is to modify the CV based on the feedback. The result should be a refined CV with the feedback fully applied. 
+Make sure the feedback is directly incorporated into the CV. You **must** modify the CV draft in line with the feedback provided, not just review it.
 
-Only report actual problems. If field is intentionally empty (no data available), don't flag it.
-Return empty array [] if CV is good."""
-
+Return the updated CV JSON, in the same structure as the original draft.
+"""
         result = get_llm_response(prompt)
         try:
             content = result.choices[0].message.content
             content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
-            feedback = json.loads(content)
+            draft_json = json.loads(content)
+            draft['cv'] = CVSchema(**draft_json).model_dump()
         except Exception as e:
             print(f"Review error: {e}")
-            feedback = []
-        
-        # If feedback is returned as empty, we don't want to append an empty list
-        if feedback:
-            feedback_history = draft.get("feedbackHistory", [])
-            feedback_history.append(feedback)  # Append feedback (not an empty list)
-        
-        # Overwrite last feedback with the latest feedback
-        last_feedback = feedback[-1] if feedback else ""  # Only overwrite if feedback exists
 
-        draft["feedbackHistory"] = feedback_history  # Append to feedback history
-        draft["lastFeedback"] = last_feedback  # Overwrite last feedback
         return draft
 
 class RefinementAgent:
     def refine(self, draft, employee_record):
-        prompt = f"""Refine CV draft based on feedback and original data:
+        prompt = f"""Refine CV draft based on feedback:
 
 ORIGINAL DATA:
 {employee_record}
@@ -154,73 +121,17 @@ CURRENT CV:
 FEEDBACK TO ADDRESS:
 {json.dumps(draft.get('feedback', []), indent=2)}
 
-REFINEMENT INSTRUCTIONS:
-1. Address feedback first (highest priority), most priority has latest entry in the array, one before it if exists has 50% priority, 3rd has 20%
-2. Improve clarity and professionalism
-3. Return complete CV JSON matching schema
-
-No markdown, no explanations."""
-
+Return refined CV JSON matching schema.
+Important: Make sure output you give is indeed refined, and never same as input.
+"""
         result = get_llm_response(prompt)
         try:
             content = result.choices[0].message.content
             content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
             draft_json = json.loads(content)
-            draft["cv"] = CVSchema(**draft_json).model_dump()
+            draft['cv'] = CVSchema(**draft_json).model_dump()
         except Exception as e:
             print(f"Refinement error: {e}")
-            draft["cv"] = draft.get("cv", {})
 
-        # Append to feedback history
-        if draft.get('feedback'):
-            feedback_history = draft.get('feedbackHistory', [])
-            feedback_history.append(draft['feedback'])  # Append the new feedback
-
-        # Overwrite the last feedback with the most recent feedback
-        last_feedback = draft.get('feedback', [])[-1] if draft.get('feedback') else ""  # Overwrite with latest feedback
-
-        draft["lastFeedback"] = last_feedback
-        draft["feedbackHistory"] = feedback_history  # Append feedback history
-        return draft
-
-class RefinementAgent:
-    def refine(self, draft, employee_record):
-        prompt = f"""Refine CV draft based on feedback and original data:
-
-ORIGINAL DATA:
-{employee_record}
-
-CURRENT CV:
-{json.dumps(draft['cv'], indent=2)}
-
-FEEDBACK TO ADDRESS:
-{json.dumps(draft.get('feedback', []), indent=2)}
-
-REFINEMENT INSTRUCTIONS:
-1. Address feedback first (highest priority), most priority has latest entry in the array, one before it if exists has 50% priority, 3rd has 20%
-2. Improve clarity and professionalism
-3. Return complete CV JSON matching schema
-
-No markdown, no explanations."""
-
-        result = get_llm_response(prompt)
-        try:
-            content = result.choices[0].message.content
-            content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
-            draft_json = json.loads(content)
-            draft["cv"] = CVSchema(**draft_json).model_dump()
-        except Exception as e:
-            print(f"Refinement error: {e}")
-            draft["cv"] = draft.get("cv", {})
-
-        # Append to feedback history
-        feedback_history = draft.get('feedbackHistory', [])
-        feedback_history.append(draft.get('feedback', []))
-        
-        # Overwrite the last feedback with the most recent feedback
-        last_feedback = draft.get('feedback', [])[-1] if draft.get('feedback') else ""  # Overwrite with latest feedback
-
-        draft["lastFeedback"] = last_feedback
-        draft["feedbackHistory"] = feedback_history  # Append feedback history
-
+        draft['lastFeedback'] = draft.get('feedback', [])[-1] if draft.get('feedback') else draft.get('lastFeedback', "")
         return draft
