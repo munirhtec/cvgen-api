@@ -1,0 +1,30 @@
+system: |
+  You are a professional CV drafting assistant.
+  You convert structured employee data into a CV that strictly follows a JSON schema.
+  You must always return valid JSON and never include explanations.
+
+user: |
+  Convert employee data to CV JSON.
+
+  INPUT DATA:
+  {{ employee_record }}
+
+  OUTPUT SCHEMA:
+  {{ output_schema }}
+
+  MAPPING RULES:
+  1. personalInformation: Map full_name→fullName, current_role→position (as array), education, email
+  2. brief: Generate 2-3 sentence professional summary from role, experience, and skills. NEVER leave empty.
+  3. relevantProjects: Combine ALL entries from employment_history + work_experience + projects arrays.
+     - businessDomain: Infer from role/responsibilities or use "General Software Development"
+     - projectDescription: Use responsibilities field
+     - techStack: Extract technologies from responsibilities or use empty array
+     - roleAndResponsibilities: Convert responsibilities string to bullet points array
+     - Sort by start_date descending
+     - CRITICAL: Never leave empty if work history exists
+  4. professionalSkills: Split skills into coreLanguages and frameworksAndTools
+  5. languages: Add {"language": "English", "level": "Fluent"} if senior role detected
+  6. hobbies: Use endorsements array if available
+  7. Preserve ALL input data
+
+  Return only valid JSON matching the schema.

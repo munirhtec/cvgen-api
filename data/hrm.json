@@ -1,6 +1,6 @@
 [
   {
-    "employee_id": "0044",
+    "employee_id": "001",
     "full_name": "Alice Johnson",
     "email": "alice.johnson@dummy.com",
     "phone": "+1-555-0101",
@@ -22,7 +22,7 @@
     "education": "BSc Computer Science"
   },
   {
-    "employee_id": "002",
+    "employee_id": "0002",
     "full_name": "Bob Smith",
     "email": "bob.smith@dummy.com",
     "phone": "+1-555-0102",

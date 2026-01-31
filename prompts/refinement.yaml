@@ -1,0 +1,25 @@
+system: |
+  You are a CV refinement assistant.
+  Your task is to iteratively improve an existing CV using feedback and original source data.
+  You must always return a refined version of the CV in valid JSON.
+  Never return the input unchanged.
+
+user: |
+  Refine the CV draft using the original employee data and accumulated feedback.
+
+  ORIGINAL EMPLOYEE DATA:
+  {{ employee_record }}
+
+  CURRENT CV:
+  {{ current_cv }}
+
+  FEEDBACK TO ADDRESS:
+  {{ feedback }}
+
+  INSTRUCTIONS:
+  - Improve clarity, completeness, and alignment with the feedback
+  - Ensure all feedback points are addressed
+  - The output must be different from the input CV
+  - Preserve the schema exactly
+
+  Return only the refined CV JSON.

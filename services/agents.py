@@ -2,11 +2,19 @@ import json
 import re
 from typing import List
 from pydantic import BaseModel, EmailStr
+
 from lib.llm import get_llm_response
+from lib.prompts import load_prompt
+
+
+# -----------------------
+# Schemas
+# -----------------------
 
 class LanguageLevel(BaseModel):
     language: str
     level: str
+
 
 class RelevantProject(BaseModel):
     businessDomain: str
@@ -14,15 +22,18 @@ class RelevantProject(BaseModel):
     techStack: List[str]
     roleAndResponsibilities: List[str]
 
+
 class ProfessionalSkills(BaseModel):
     coreLanguages: List[str]
     frameworksAndTools: List[str]
+
 
 class PersonalInformation(BaseModel):
     fullName: str
     position: List[str]
     education: str
     email: EmailStr
+
 
 class CVSchema(BaseModel):
     personalInformation: PersonalInformation
@@ -32,44 +43,49 @@ class CVSchema(BaseModel):
     hobbies: List[str]
     relevantProjects: List[RelevantProject]
 
+
 def cv_to_json(cv: CVSchema) -> str:
     return cv.model_dump_json(indent=2)
+
+
+# -----------------------
+# Drafting Agent
+# -----------------------
 
 class DraftingAgent:
     def generate(self, employee_record):
         empty_cv = CVSchema(
-            personalInformation=PersonalInformation(fullName="", position=[], education="", email="example@example.com"),
+            personalInformation=PersonalInformation(
+                fullName="",
+                position=[],
+                education="",
+                email="example@example.com",
+            ),
             brief="",
-            professionalSkills=ProfessionalSkills(coreLanguages=[], frameworksAndTools=[]),
+            professionalSkills=ProfessionalSkills(
+                coreLanguages=[],
+                frameworksAndTools=[],
+            ),
             languages=[],
             hobbies=[],
-            relevantProjects=[]
+            relevantProjects=[],
         )
-        prompt = f"""Convert employee data to CV JSON:
 
-INPUT DATA:
-{employee_record}
+        prompts = load_prompt("drafting")
 
-OUTPUT SCHEMA:
-{cv_to_json(empty_cv)}
+        user_prompt = (
+            prompts["user"]
+            .replace("{{ employee_record }}", json.dumps(employee_record, indent=2))
+            .replace("{{ output_schema }}", cv_to_json(empty_cv))
+        )
 
-MAPPING RULES:
-1. personalInformation: Map full_name→fullName, current_role→position (as array), education, email
-2. brief: Generate 2-3 sentence professional summary from role, experience, and skills. NEVER leave empty.
-3. relevantProjects: Combine ALL entries from employment_history + work_experience + projects arrays. Format each as:
-   - businessDomain: Infer from role/responsibilities or use "General Software Development"
-   - projectDescription: Use responsibilities field
-   - techStack: Extract technologies from responsibilities or use empty array
-   - roleAndResponsibilities: Convert responsibilities string to bullet points array
-   Sort by start_date descending. CRITICAL: Never leave empty if work history exists.
-4. professionalSkills: Distribute skills array between coreLanguages (programming languages) and frameworksAndTools (frameworks/tools/technologies)
-5. languages: Add {{"language": "English", "level": "Fluent"}} if position contains Senior/Lead/Principal/Staff/Architect/Manager
-6. hobbies: Use endorsements array if available, otherwise empty
-7. Preserve ALL data from input - never discard information
+        result = get_llm_response(
+            system_prompt=prompts["system"],
+            user_prompt=user_prompt,
+            temperature=0.2,
+            top_p=0.9,
+        )
 
-Return only valid JSON matching the schema. No markdown, no explanations."""
-
-        result = get_llm_response(prompt)
         try:
             content = result.choices[0].message.content
             content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
@@ -79,59 +95,80 @@ Return only valid JSON matching the schema. No markdown, no explanations."""
             print(f"Draft generation error: {e}")
             draft = empty_cv.model_dump()
 
-        return {"cv": draft, "feedbackHistory": [], "lastFeedback": "", "feedback": []}
+        return {
+            "cv": draft,
+            "feedbackHistory": [],
+            "lastFeedback": "",
+            "feedback": [],
+        }
+
+
+# -----------------------
+# Review Agent
+# -----------------------
 
 class ReviewAgent:
     def review(self, draft, feedback):
-        """Apply feedback directly to the CV draft."""
-        prompt = f"""You are a CV expert. 
+        prompts = load_prompt("review")
 
-CV DRAFT:
-{json.dumps(draft['cv'], indent=2)}
+        user_prompt = (
+            prompts["user"]
+            .replace("{{ cv_draft }}", json.dumps(draft["cv"], indent=2))
+            .replace("{{ feedback }}", json.dumps(feedback, indent=2))
+        )
 
-FEEDBACK:
-{feedback}
+        result = get_llm_response(
+            system_prompt=prompts["system"],
+            user_prompt=user_prompt,
+            temperature=0.2,
+            top_p=0.9,
+        )
 
-Your task is to modify the CV based on the feedback. The result should be a refined CV with the feedback fully applied. 
-Make sure the feedback is directly incorporated into the CV. You **must** modify the CV draft in line with the feedback provided, not just review it.
-
-Return the updated CV JSON, in the same structure as the original draft.
-"""
-        result = get_llm_response(prompt)
         try:
             content = result.choices[0].message.content
             content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
             draft_json = json.loads(content)
-            draft['cv'] = CVSchema(**draft_json).model_dump()
+            draft["cv"] = CVSchema(**draft_json).model_dump()
         except Exception as e:
             print(f"Review error: {e}")
 
         return draft
 
+
+# -----------------------
+# Refinement Agent
+# -----------------------
+
 class RefinementAgent:
     def refine(self, draft, employee_record):
-        prompt = f"""Refine CV draft based on feedback:
+        prompts = load_prompt("refinement")
 
-ORIGINAL DATA:
-{employee_record}
+        user_prompt = (
+            prompts["user"]
+            .replace("{{ employee_record }}", json.dumps(employee_record, indent=2))
+            .replace("{{ current_cv }}", json.dumps(draft["cv"], indent=2))
+            .replace("{{ feedback }}", json.dumps(draft.get("feedback", []), indent=2))
+        )
 
-CURRENT CV:
-{json.dumps(draft['cv'], indent=2)}
+        result = get_llm_response(
+            system_prompt=prompts["system"],
+            user_prompt=user_prompt,
+            temperature=0.3,
+            top_p=0.9,
+        )
 
-FEEDBACK TO ADDRESS:
-{json.dumps(draft.get('feedback', []), indent=2)}
-
-Return refined CV JSON matching schema.
-Important: Make sure output you give is indeed refined, and never same as input.
-"""
-        result = get_llm_response(prompt)
         try:
             content = result.choices[0].message.content
             content = re.sub(r"^```json\s*|\s*```$", "", content.strip(), flags=re.DOTALL)
             draft_json = json.loads(content)
-            draft['cv'] = CVSchema(**draft_json).model_dump()
+            draft["cv"] = CVSchema(**draft_json).model_dump()
         except Exception as e:
             print(f"Refinement error: {e}")
 
-        draft['lastFeedback'] = draft.get('feedback', [])[-1] if draft.get('feedback') else draft.get('lastFeedback', "")
+        draft["lastFeedback"] = (
+            draft.get("feedback", [])[-1]
+            if draft.get("feedback")
+            else draft.get("lastFeedback", "")
+        )
+
         return draft
