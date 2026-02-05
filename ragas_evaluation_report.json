@@ -1,0 +1,49 @@
+{
+  "evaluations": [
+    {
+      "context_relevancy": 1.0,
+      "answer_relevancy": 0.9,
+      "faithfulness": 1.0,
+      "completeness": 0.7,
+      "overall_score": 7.5,
+      "reasoning": "1. Context Relevancy: The source data is highly relevant for CV generation, containing all essential fields (personal info, roles, employment history, education, projects, business context). No irrelevant fields are present, so the score is 1.0.\n\n2. Answer Relevancy: The generated CV is strongly grounded in the source data. All listed roles, projects, and education are present and accurately reflected. The CV does not introduce unrelated sections. However, the CV omits some details (e.g., employment dates, organizations, performance metrics from projects), and the 'professionalSkills', 'languages', and 'hobbies' sections are empty, which slightly reduces relevancy. Score: 0.9.\n\n3. Faithfulness: The CV contains no hallucinated information. All facts (roles, responsibilities, education, project descriptions) are directly supported by the source. No inferred skills or languages are present, and no information is fabricated. Score: 1.0.\n\n4. Completeness: The CV misses some critical details. It does not include employment dates, organization names (even if 'Unknown'), or project performance metrics. The 'professionalSkills', 'languages', and 'hobbies' sections are empty, even though the source does not provide this info, but a strict CV should either omit these sections or indicate 'not provided'. The lack of these details means the CV is not fully complete. Score: 0.7.\n\n5. Overall Score: The CV is well-structured, faithful, and relevant, but the lack of completeness (missing dates, organizations, metrics, and empty skill sections) makes it less useful for employers. Penalizing for these omissions, the overall score is 7.5/10."
+    },
+    {
+      "context_relevancy": 1.0,
+      "answer_relevancy": 0.9,
+      "faithfulness": 1.0,
+      "completeness": 0.7,
+      "overall_score": 6.5,
+      "reasoning": "The source data is highly relevant for CV generation, containing all essential fields (name, contact, role, education, work history, responsibilities). The generated CV is mostly relevant to the source, accurately reflecting the employee's role, education, and responsibilities. There are no hallucinations; all information in the CV is directly grounded in the source. However, completeness is lacking: the CV omits some fields present in the source (e.g., phone number, organization name for employment, and leaves skills, languages, and hobbies empty despite their absence in the source). The 'brief' section is generic and could be more informative. The 'relevantProjects' section is a direct mapping of work responsibilities, which is acceptable given the source, but the business domain ('General Software Development') is inferred and not present in the source, though this is a minor issue. Overall, the CV is usable but lacks polish and completeness for employer use, especially in presenting all available contact and employment details."
+    },
+    {
+      "context_relevancy": 1.0,
+      "answer_relevancy": 1.0,
+      "faithfulness": 1.0,
+      "completeness": 0.5,
+      "overall_score": 4.0,
+      "reasoning": "Context relevancy is perfect (1.0): all source fields are appropriate for CV generation, even though many are empty. Answer relevancy is also perfect (1.0): the CV only uses information present in the source and does not introduce unrelated sections. Faithfulness is perfect (1.0): there are no hallucinations or invented facts; the CV strictly reflects the source data. However, completeness is low (0.5): the CV is missing critical sections such as work history, skills, projects, and endorsements, all of which are empty in the source. This results in a sparse CV that lacks substance for employer use. Overall score is 4.0/10: while the CV is accurate and faithful, it is too incomplete to be useful for most employers, as it does not provide enough detail about the candidate's experience or capabilities."
+    },
+    {
+      "context_relevancy": 1.0,
+      "answer_relevancy": 0.9,
+      "faithfulness": 0.95,
+      "completeness": 0.8,
+      "overall_score": 7.5,
+      "reasoning": "1. Context Relevancy: The source data is highly relevant for CV generation, containing all the essential fields (name, contact, roles, education, work history, projects, business context). No irrelevant fields are present. \n\n2. Answer Relevancy: The generated CV is mostly relevant to the source data, accurately reflecting the roles, education, and project responsibilities. However, the CV introduces 'businessDomain: General Software Development' for projects, which is a minor generalization not explicitly stated in the source (source says 'Software QA'). This is a small deviation, so answer relevancy is slightly penalized.\n\n3. Faithfulness: The CV is almost entirely faithful to the source, with all facts grounded in the data. The only minor issue is the aforementioned generalization of business domain, but there are no major hallucinations or invented facts.\n\n4. Completeness: The CV includes all major work history and project details, but omits some fields present in the source, such as phone number and the current role (QA Engineer) is not explicitly listed in work experience or projects. The 'skills', 'languages', and 'hobbies' sections are empty, which matches the source, but the lack of a summary of skills (even if empty) may be seen as a minor omission. Also, the organization for employment history is 'Unknown' in the source and not mentioned in the CV, which is acceptable but not ideal. \n\n5. Overall Score: The CV is suitable for employer use, but the lack of phone number, minor generalization of business domain, and absence of a skills summary reduce its utility. The score reflects these minor issues while recognizing the overall faithfulness and relevance."
+    },
+    {
+      "context_relevancy": 1.0,
+      "answer_relevancy": 0.9,
+      "faithfulness": 0.95,
+      "completeness": 0.8,
+      "overall_score": 7.5,
+      "reasoning": "1. Context Relevancy: The source data is highly relevant for CV generation, containing all the essential fields (name, contact, role, education, work history, projects). No irrelevant fields are present. \n\n2. Answer Relevancy: The generated CV is mostly relevant to the source data, accurately reflecting the employee's roles, education, and project experience. However, the 'businessDomain' field in 'relevantProjects' is set to 'General Software Development', which is not grounded in the source (should be 'Artificial Intelligence'). This is a minor mismatch, so a small penalty is applied.\n\n3. Faithfulness: The CV is almost entirely faithful to the source data. All facts (roles, responsibilities, education) are present and correct. The only minor issue is the inferred 'businessDomain' as 'General Software Development', which is not supported by the source. No major hallucinations are present.\n\n4. Completeness: The CV includes all major work history and projects. However, it omits some details that could be inferred or explicitly stated, such as the organization name for the internship (even if 'Unknown'), and does not mention the project performance metric ('Model accuracy 92%'). The skills section is empty, which matches the source, but for employer use, this is a notable omission. Languages and hobbies are also empty, but this is faithful to the source.\n\n5. Overall Score: The CV is suitable for employer use, but the lack of skills, languages, and some project details (performance metrics) reduces its utility. The minor hallucination in 'businessDomain' also impacts the score. Strictly, this CV is solid but not outstanding, hence a 7.5."
+    }
+  ],
+  "average_context_relevancy": 1.0,
+  "average_answer_relevancy": 0.9199999999999999,
+  "average_faithfulness": 0.9800000000000001,
+  "average_completeness": 0.7,
+  "average_overall_score": 6.6
+}

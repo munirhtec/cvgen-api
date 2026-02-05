@@ -2,9 +2,13 @@ from difflib import SequenceMatcher, get_close_matches
 import os, json
 from collections import defaultdict
 import faiss, numpy as np
-from sentence_transformers import SentenceTransformer
+from lib.llm import client, settings, get_llm_response
+from lib.prompts import load_prompt
+from pydantic import BaseModel
+from typing import List, Optional, Any
+from services import data_generator
 
-model = SentenceTransformer("all-mpnet-base-v2")
+# model = SentenceTransformer("all-mpnet-base-v2") # Removed local model
 index = None
 records, vectors = [], []
 
@@ -17,124 +21,73 @@ def load_json(path):
 def normalize_string(s):
     return (s or "").strip().lower().replace("-", "").replace("_", "")
 
-def find_best_match(rec, unified):
-    """
-    Find the best matching employee in unified dict using multiple heuristics:
-    - Exact/normalized employee_id
-    - Email match
-    - Phone match
-    - Full name fuzzy match
-    Returns key in unified if found, else None.
-    """
-    eid_norm = normalize_string(rec.get("employee_id", ""))
-    email = (rec.get("email") or "").lower()
-    phone = (rec.get("phone") or "").lower()
-    full_name_norm = normalize_string(rec.get("full_name", ""))
 
-    # Try normalized employee_id
-    if eid_norm in unified:
-        return eid_norm
 
-    # Try exact email
-    for k, u in unified.items():
-        if u.get("email", "").lower() == email and email:
-            return k
+class UnifiedExperience(BaseModel):
+    type: str  # "employment" or "project"
+    role: Optional[str] = None
+    organization: Optional[str] = None
+    project_id: Optional[str] = None
+    project_name: Optional[str] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    responsibilities: Optional[str] = ""
+    performance_metrics: Optional[Any] = {}
 
-    # Try exact phone
-    for k, u in unified.items():
-        if u.get("phone", "").lower() == phone and phone:
-            return k
+class UnifiedRecord(BaseModel):
+    employee_id: str
+    full_name: str
+    email: Optional[str] = ""
+    phone: Optional[str] = ""
+    current_role: Optional[str] = ""
+    business_context: Optional[str] = ""
+    skills: List[str] = []
+    endorsements: List[str] = []
+    education: Optional[str] = ""
+    work_experience: List[UnifiedExperience] = []
 
-    # Try fuzzy full_name match
-    names = [normalize_string(u.get("full_name", "")) for u in unified.values()]
-    matches = get_close_matches(full_name_norm, names, n=1, cutoff=0.8)
-    if matches:
-        # Return key corresponding to the matched name
-        for k, u in unified.items():
-            if normalize_string(u.get("full_name", "")) == matches[0]:
-                return k
-
-    return None
+class UnifiedRecordsList(BaseModel):
+    records: List[UnifiedRecord]
 
 def merge_records_on_the_fly(hrm_path="data/hrm.json", xops_path="data/xops.json", custom_path="data/custom.json"):
+    # Try loading files first
     hrm = load_json(hrm_path)
     xops = load_json(xops_path)
     custom = load_json(custom_path)
-    unified = defaultdict(dict)
 
-    # Load HRM as base
-    for rec in hrm:
-        eid_norm = normalize_string(rec.get("employee_id", ""))
-        unified[eid_norm].update(rec)
+    # If any essential data is missing, generate it dynamically
+    if not hrm:
+        print("⚠️ Data files not found or empty. Generating synthetic data...")
+        batch = data_generator.generate_batch(5)
+        hrm = [r.model_dump() for r in batch.hrm]
+        xops = [r.model_dump() for r in batch.xops]
+        custom = [r.model_dump() for r in batch.custom]
+        print(f"✅ Generated {len(hrm)} synthetic records.")
 
-    # Merge xOPS projects
-    for rec in xops:
-        key = find_best_match(rec, unified)
-        if not key:
-            # Create new entry if no match
-            key = normalize_string(rec.get("employee_id", "new_" + str(len(unified)+1)))
-        unified[key].setdefault("projects", [])
-        for proj in rec.get("projects", []):
-            unified[key]["projects"].append({
-                "project_id": proj.get("project_id", ""),
-                "project_name": proj.get("project_name", "") or "Unnamed Project",
-                "role": proj.get("role", "Unknown role"),
-                "responsibilities": proj.get("responsibilities", ""),
-                "performance_metrics": proj.get("performance_metrics", {})
-            })
+    # Prepare data for LLM
+    prompts = load_prompt("record_merging")
+    user_prompt = prompts["user"].replace("{{ hrm_data }}", json.dumps(hrm, indent=2))
+    user_prompt = user_prompt.replace("{{ xops_data }}", json.dumps(xops, indent=2))
+    user_prompt = user_prompt.replace("{{ custom_data }}", json.dumps(custom, indent=2))
 
-    # Merge custom records (skills, endorsements, business context)
-    for rec in custom:
-        key = find_best_match(rec, unified)
-        if not key:
-            key = normalize_string(rec.get("employee_id", "new_" + str(len(unified)+1)))
-        unified[key].setdefault("endorsements", [])
-        unified[key].setdefault("skills", [])
-        unified[key]["business_context"] = rec.get("business_context", unified[key].get("business_context", ""))
-        unified[key]["endorsements"].extend(rec.get("endorsements", []))
-        unified[key]["skills"].extend(rec.get("skills", []))
-
-    # Build unified work_experience in chronological order
-    for key, rec in unified.items():
-        rec.setdefault("full_name", "Unknown")
-        rec.setdefault("current_role", "Unknown")
-        rec.setdefault("business_context", "")
-        rec.setdefault("endorsements", [])
-        rec.setdefault("skills", [])
-        rec.setdefault("employment_history", [])
-        rec.setdefault("education", "")
-        rec.setdefault("projects", [])
-        rec.setdefault("work_experience", [])
-
-        work_exp = []
-
-        # Add employment history
-        for job in rec.get("employment_history", []):
-            work_exp.append({
-                "type": "employment",
-                "role": job.get("role", "Unknown role"),
-                "organization": job.get("organization", "Unknown"),
-                "start_date": job.get("start_date"),
-                "end_date": job.get("end_date"),
-                "responsibilities": job.get("responsibilities", "")
-            })
-
-        # Add projects
-        for proj in rec.get("projects", []):
-            work_exp.append({
-                "type": "project",
-                "project_id": proj.get("project_id", ""),
-                "project_name": proj.get("project_name", ""),
-                "role": proj.get("role", ""),
-                "responsibilities": proj.get("responsibilities", ""),
-                "performance_metrics": proj.get("performance_metrics", {})
-            })
-
-        # Sort work_experience by start_date if available
-        work_exp.sort(key=lambda x: x.get("start_date") or "9999-12-31")
-        rec["work_experience"] = work_exp
-
-    return list(unified.values())
+    print("Merging records using LLM...")
+    try:
+        response = get_llm_response(
+            system_prompt=prompts["system"],
+            user_prompt=user_prompt,
+            temperature=0.2,
+            response_model=UnifiedRecordsList
+        )
+        unified_list = response.parsed.records
+        
+        # Sort work_experience for each record
+        for rec in unified_list:
+            rec.work_experience.sort(key=lambda x: x.start_date or "9999-12-31")
+            
+        return [r.model_dump() for r in unified_list]
+    except Exception as e:
+        print(f"❌ Record merging failed: {e}")
+        return []
 
 def generate_record_summary(rec):
     s = []
@@ -165,7 +118,9 @@ def serialize_record(rec, mode="summary"):
     return generate_record_summary(rec)
 
 def vectorize_text(text):
-    return model.encode([text])[0]
+    text = text.replace("\n", " ")
+    response = client.embeddings.create(input=[text], model=settings.embedding_model)
+    return np.array(response.data[0].embedding, dtype="float32")
 
 def normalize(vec):
     return vec if np.linalg.norm(vec) == 0 else vec / np.linalg.norm(vec)

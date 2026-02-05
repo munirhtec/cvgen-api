@@ -54,13 +54,46 @@ class CVPipeline:
 # FastAPI routes
 @router.post("/start/{employee_query}")
 def start_cv(employee_query: str):
+    """
+    Start CV generation with AUTOMATED 3-AGENT PIPELINE.
+    
+    This endpoint automatically runs the CV through all 3 agents:
+    1. DraftingAgent: Creates initial CV from employee data
+    2. ReviewAgent: Fact-checks and validates (anti-hallucination)
+    3. RefinementAgent: Final polish and quality assurance
+    
+    This reduces hallucinations and improves overall quality.
+    """
     employee = find_employee(employee_query)
     if not employee:
         raise HTTPException(status_code=404, detail="Employee not found")
     
     pipeline = CVPipeline(employee)
     pipelines[str(employee["employee_id"])] = pipeline
-    return {"message": "Draft created", "employee_id": pipeline.employee_id, "draft": pipeline.draft()}
+    
+    # AUTOMATED 3-AGENT PIPELINE
+    print(f"🚀 Starting automated CV generation for {employee.get('full_name', 'Unknown')}")
+    
+    # Step 1: Draft
+    print("  📝 Step 1/3: Drafting...")
+    draft_result = pipeline.draft()
+    
+    # Step 2: Review (fact-checking, anti-hallucination)
+    print("  🔍 Step 2/3: Reviewing and fact-checking...")
+    reviewed_result = pipeline.review()
+    
+    # Step 3: Refine (final quality assurance)
+    print("  ✨ Step 3/3: Refining...")
+    final_result = pipeline.refine()
+    
+    print(f"  ✅ CV generation complete!")
+    
+    return {
+        "message": "CV generated through 3-agent pipeline (draft → review → refine)",
+        "employee_id": pipeline.employee_id,
+        "draft": final_result,
+        "pipeline_stages": ["drafting", "review", "refinement"]
+    }
 
 
 @router.get("/draft/{employee_id}")

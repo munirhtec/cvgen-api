@@ -64,7 +64,7 @@
   },
   {
     "employee_id": "005",
-    "full_name": "Eva Martín",
+    "full_name": "Eva Mart\u00c3\u00adn",
     "email": "eva.martin@dummy.com",
     "phone": "+1-555-0105",
     "current_role": "AI Engineer",
@@ -175,5 +175,100 @@
       }
     ],
     "education": "BSc Cybersecurity"
+  },
+  {
+    "employee_id": "EMP001",
+    "full_name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "phone": "+1-555-123-4567",
+    "employment_history": [
+      {
+        "company": "TechCorp",
+        "position": "Software Developer",
+        "duration": "2018-2021"
+      },
+      {
+        "company": "Innovate Ltd",
+        "position": "Junior Developer",
+        "duration": "2015-2018"
+      }
+    ],
+    "education": "B.Sc. Computer Science, University of California"
+  },
+  {
+    "employee_id": "EMP002",
+    "full_name": "Bob Smith",
+    "email": "bob.smith@example.com",
+    "phone": "+1-555-234-5678",
+    "employment_history": [
+      {
+        "company": "BuildTech",
+        "position": "Project Manager",
+        "duration": "2016-2022"
+      },
+      {
+        "company": "ConstructPro",
+        "position": "Assistant Project Manager",
+        "duration": "2012-2016"
+      }
+    ],
+    "education": "MBA, Stanford University"
+  },
+  {
+    "employee_id": "EMP003",
+    "full_name": "Charlie Davis",
+    "email": "charlie.davis@example.com",
+    "phone": "+1-555-345-6789",
+    "employment_history": [
+      {
+        "company": "QualityWorks",
+        "position": "QA Engineer",
+        "duration": "2017-2023"
+      },
+      {
+        "company": "VerifyTech",
+        "position": "Junior QA Tester",
+        "duration": "2014-2017"
+      }
+    ],
+    "education": "B.Sc. Information Technology, MIT"
+  },
+  {
+    "employee_id": "EMP004",
+    "full_name": "Diana Green",
+    "email": "diana.green@example.com",
+    "phone": "+1-555-456-7890",
+    "employment_history": [
+      {
+        "company": "CodeCraft",
+        "position": "Senior Developer",
+        "duration": "2019-2023"
+      },
+      {
+        "company": "WebWorks",
+        "position": "Developer",
+        "duration": "2015-2019"
+      }
+    ],
+    "education": "M.Sc. Software Engineering, Harvard University"
+  },
+  {
+    "employee_id": "EMP005",
+    "full_name": "Eve Lopez",
+    "email": "eve.lopez@example.com",
+    "phone": "+1-555-567-8901",
+    "employment_history": [
+      {
+        "company": "AnalyzeIT",
+        "position": "Data Analyst",
+        "duration": "2018-2023"
+      },
+      {
+        "company": "StatWorks",
+        "position": "Junior Analyst",
+        "duration": "2014-2018"
+      }
+    ],
+    "education": "B.Sc. Data Science, University of Chicago"
   }
 ]

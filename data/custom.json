@@ -48,5 +48,74 @@
     "employee_id": "010",
     "business_context": "Cybersecurity",
     "team_contributions": "Developed company-wide security policies"
+  },
+  {
+    "employee_id": "EMP001",
+    "business_context": "Software Development",
+    "skills": [
+      "Java",
+      "Spring Boot",
+      "SQL",
+      "REST APIs"
+    ],
+    "endorsements": [
+      "Backend Development",
+      "API Integration"
+    ]
+  },
+  {
+    "employee_id": "EMP002",
+    "business_context": "Project Management",
+    "skills": [
+      "Agile Methodologies",
+      "Team Leadership",
+      "Budget Planning"
+    ],
+    "endorsements": [
+      "Leadership",
+      "Agile Expertise"
+    ]
+  },
+  {
+    "employee_id": "EMP003",
+    "business_context": "Quality Assurance",
+    "skills": [
+      "Test Automation",
+      "Selenium",
+      "JIRA",
+      "Bug Tracking"
+    ],
+    "endorsements": [
+      "Attention to Detail",
+      "Automation Expertise"
+    ]
+  },
+  {
+    "employee_id": "EMP004",
+    "business_context": "Software Development",
+    "skills": [
+      "JavaScript",
+      "Node.js",
+      "React",
+      "AWS"
+    ],
+    "endorsements": [
+      "Frontend Development",
+      "Cloud Computing"
+    ]
+  },
+  {
+    "employee_id": "EMP005",
+    "business_context": "Data Analysis",
+    "skills": [
+      "Python",
+      "Tableau",
+      "SQL",
+      "Statistics"
+    ],
+    "endorsements": [
+      "Data Visualization",
+      "Statistical Analysis"
+    ]
   }
 ]

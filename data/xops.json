@@ -117,5 +117,130 @@
         "performance_metrics": "Passed ISO 27001 audit"
       }
     ]
+  },
+  {
+    "employee_id": "EMP001",
+    "projects": [
+      {
+        "project_id": "PRJ001",
+        "project_name": "E-commerce Platform",
+        "role": "Lead Developer",
+        "responsibilities": "Developing backend services and APIs.",
+        "performance_metrics": {
+          "code_quality": "Excellent",
+          "delivery_rate": "On-time"
+        }
+      },
+      {
+        "project_id": "PRJ002",
+        "project_name": "Inventory Management System",
+        "role": "Developer",
+        "responsibilities": "Integrating database solutions.",
+        "performance_metrics": {
+          "code_quality": "Good",
+          "delivery_rate": "Ahead of schedule"
+        }
+      }
+    ]
+  },
+  {
+    "employee_id": "EMP002",
+    "projects": [
+      {
+        "project_id": "PRJ003",
+        "project_name": "Construction Management App",
+        "role": "Project Manager",
+        "responsibilities": "Leading the team and managing timelines.",
+        "performance_metrics": {
+          "team_satisfaction": "High",
+          "budget_adherence": "On-point"
+        }
+      },
+      {
+        "project_id": "PRJ004",
+        "project_name": "CRM System Upgrade",
+        "role": "Project Manager",
+        "responsibilities": "Coordinating tasks across departments.",
+        "performance_metrics": {
+          "team_satisfaction": "Medium",
+          "budget_adherence": "Under budget"
+        }
+      }
+    ]
+  },
+  {
+    "employee_id": "EMP003",
+    "projects": [
+      {
+        "project_id": "PRJ005",
+        "project_name": "Healthcare App Testing",
+        "role": "QA Lead",
+        "responsibilities": "Developing test cases and leading QA processes.",
+        "performance_metrics": {
+          "bug_detection_rate": "High",
+          "customer_satisfaction": "Positive"
+        }
+      },
+      {
+        "project_id": "PRJ006",
+        "project_name": "Payment Gateway QA",
+        "role": "QA Engineer",
+        "responsibilities": "Ensuring system reliability through testing.",
+        "performance_metrics": {
+          "bug_detection_rate": "Medium",
+          "customer_satisfaction": "Neutral"
+        }
+      }
+    ]
+  },
+  {
+    "employee_id": "EMP004",
+    "projects": [
+      {
+        "project_id": "PRJ007",
+        "project_name": "Social Media Analytics Tool",
+        "role": "Senior Developer",
+        "responsibilities": "Designing scalable architectures.",
+        "performance_metrics": {
+          "code_quality": "Outstanding",
+          "delivery_rate": "On-time"
+        }
+      },
+      {
+        "project_id": "PRJ008",
+        "project_name": "Mobile Banking App",
+        "role": "Developer",
+        "responsibilities": "Implementing security features.",
+        "performance_metrics": {
+          "code_quality": "Very Good",
+          "delivery_rate": "Ahead of schedule"
+        }
+      }
+    ]
+  },
+  {
+    "employee_id": "EMP005",
+    "projects": [
+      {
+        "project_id": "PRJ009",
+        "project_name": "Retail Data Dashboard",
+        "role": "Data Analyst",
+        "responsibilities": "Developing data visualization dashboards.",
+        "performance_metrics": {
+          "accuracy": "High",
+          "timeliness": "Excellent"
+        }
+      },
+      {
+        "project_id": "PRJ010",
+        "project_name": "Market Analysis Tool",
+        "role": "Data Analyst",
+        "responsibilities": "Performing statistical analyses.",
+        "performance_metrics": {
+          "accuracy": "Medium",
+          "timeliness": "Good"
+        }
+      }
+    ]
   }
 ]
