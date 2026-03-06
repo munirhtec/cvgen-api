@@ -8,7 +8,6 @@ from pydantic import BaseModel
 from typing import List, Optional, Any
 from services import data_generator
 
-# model = SentenceTransformer("all-mpnet-base-v2") # Removed local model
 index = None
 records, vectors = [], []
 
@@ -23,39 +22,13 @@ def normalize_string(s):
 
 
 
-class UnifiedExperience(BaseModel):
-    type: str  # "employment" or "project"
-    role: Optional[str] = None
-    organization: Optional[str] = None
-    project_id: Optional[str] = None
-    project_name: Optional[str] = None
-    start_date: Optional[str] = None
-    end_date: Optional[str] = None
-    responsibilities: Optional[str] = ""
-    performance_metrics: Optional[Any] = {}
-
-class UnifiedRecord(BaseModel):
-    employee_id: str
-    full_name: str
-    email: Optional[str] = ""
-    phone: Optional[str] = ""
-    current_role: Optional[str] = ""
-    business_context: Optional[str] = ""
-    skills: List[str] = []
-    endorsements: List[str] = []
-    education: Optional[str] = ""
-    work_experience: List[UnifiedExperience] = []
-
-class UnifiedRecordsList(BaseModel):
-    records: List[UnifiedRecord]
+from models.record import UnifiedRecord, UnifiedExperience, UnifiedRecordsList
 
 def merge_records_on_the_fly(hrm_path="data/hrm.json", xops_path="data/xops.json", custom_path="data/custom.json"):
-    # Try loading files first
     hrm = load_json(hrm_path)
     xops = load_json(xops_path)
     custom = load_json(custom_path)
 
-    # If any essential data is missing, generate it dynamically
     if not hrm:
         print("⚠️ Data files not found or empty. Generating synthetic data...")
         batch = data_generator.generate_batch(5)
@@ -64,7 +37,6 @@ def merge_records_on_the_fly(hrm_path="data/hrm.json", xops_path="data/xops.json
         custom = [r.model_dump() for r in batch.custom]
         print(f"✅ Generated {len(hrm)} synthetic records.")
 
-    # Prepare data for LLM
     prompts = load_prompt("record_merging")
     user_prompt = prompts["user"].replace("{{ hrm_data }}", json.dumps(hrm, indent=2))
     user_prompt = user_prompt.replace("{{ xops_data }}", json.dumps(xops, indent=2))
@@ -80,7 +52,6 @@ def merge_records_on_the_fly(hrm_path="data/hrm.json", xops_path="data/xops.json
         )
         unified_list = response.parsed.records
         
-        # Sort work_experience for each record
         for rec in unified_list:
             rec.work_experience.sort(key=lambda x: x.start_date or "9999-12-31")
             
@@ -110,8 +81,8 @@ def serialize_record(rec, mode="summary"):
             f"Business context: {rec.get('business_context','')}",
             "Endorsements: " + ", ".join(rec.get("endorsements", [])),
             "Skills: " + ", ".join(rec.get("skills", [])),
-            "Roles: " + ", ".join(x.get("role", "") for x in rec.get("work_experience", [])),
-            "Projects: " + ", ".join(x.get("project_name", "") for x in rec.get("work_experience", [])),
+            "Roles: " + ", ".join((x.get("role") or "") for x in rec.get("work_experience", [])),
+            "Projects: " + ", ".join((x.get("project_name") or "") for x in rec.get("work_experience", [])),
             f"Education: {rec.get('education','')}"
         ]
         return " | ".join(parts).lower()
@@ -133,7 +104,8 @@ def build_index(records_list, mode="summary"):
         vectors.append(vec)
         records.append(rec)
     if not vectors:
-        raise ValueError("No vectors to index.")
+        print("⚠️ [RAG] No vectors to index. Skipping index build.")
+        return
     index = faiss.IndexFlatIP(len(vectors[0]))
     index.add(np.array(vectors).astype("float32"))
 
@@ -145,10 +117,13 @@ def search_similar(query, top_k=3):
     return [(int(idx), float(scores[0][i])) for i, idx in enumerate(indices[0]) if idx != -1]
 
 def search_with_scores(query, top_k=5):
-    return [
+    print(f"🔎 [RAG] Searching index for: '{query[:100]}...'")
+    results = [
         {"record": records[idx], "similarity": (score + 1) / 2 * 100} 
         for idx, score in search_similar(query, top_k)
     ]
+    print(f"📈 [RAG] Found {len(results)} matches. Best score: {results[0]['similarity']:.2f}%" if results else "📉 [RAG] No matches found.")
+    return results
 
 def search(query, top_k=5):
     if index is None or not records:
@@ -178,18 +153,15 @@ def find_employee(query, min_score=0.4):
             if not val_norm:
                 continue
 
-            # Direct substring match first
             if q_norm in val_norm:
                 return rec  # exact or partial substring found
 
-            # Token-level match: check if any query token is in value
             q_tokens = q_norm.split()
             val_tokens = val_norm.split()
             token_overlap = sum(1 for t in q_tokens if any(t in vt for vt in val_tokens))
             if token_overlap / max(len(q_tokens), 1) > 0.5:
                 return rec
 
-            # Fallback to SequenceMatcher similarity
             score = SequenceMatcher(None, q_norm, val_norm).ratio()
             if score > best_score and score >= min_score:
                 best_score = score

@@ -6,7 +6,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from pydantic import BaseModel
-from services.agents import DraftingAgent, ReviewAgent, RefinementAgent, CVSchema
+from services.agents import DraftingAgent, ReviewAgent, RefinementAgent
+from models.cv import CVSchema
 from lib.llm import get_llm_response
 from services.rag_faiss import merge_records_on_the_fly, build_index
 

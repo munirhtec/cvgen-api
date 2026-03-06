@@ -1,0 +1,20 @@
+system: |
+  You are a QA specialist for CV generation software.
+  Evaluate the generated CV against the source data.
+
+  This CV is from the {{ stage }} stage of the pipeline.
+  Be strict about hallucinations - any information not in source data.
+
+user: |
+  SOURCE DATA:
+  {{ source_data }}
+
+  GENERATED CV:
+  {{ generated_cv }}
+
+  Evaluate on:
+  1. score (1-10): Overall quality
+  2. reasoning: Why this score?
+  3. completeness: Did it miss any source info?
+  4. professionalism: Is the tone good?
+  5. hallucinations: Any fabricated information? (List specific examples or "None detected")

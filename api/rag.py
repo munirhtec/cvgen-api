@@ -30,16 +30,7 @@ async def get_employee(query: str = Query(..., description="Employee ID, full na
     else:
         raise HTTPException(status_code=404, detail="Employee not found")
 
-class QueryRequest(BaseModel):
-    job_description: str
-    top_k: int = 5
-
-class EmployeeSuggestion(BaseModel):
-    record: Dict
-    similarity: float #percentage
-
-class SuggestionsResponse(BaseModel):
-    suggestions: List[EmployeeSuggestion]
+from models.api_rag import QueryRequest, EmployeeSuggestion, SuggestionsResponse
 
 @router.post("/suggestions", response_model=SuggestionsResponse)
 async def get_suggestions(request: QueryRequest):

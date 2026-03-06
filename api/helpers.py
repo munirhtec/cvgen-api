@@ -13,10 +13,16 @@ async def extract_job_description(url: str = Query(..., description="URL to extr
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error extracting job description: {str(e)}")
 
-class QuestionRequest(BaseModel):
-    question: str
+from models.api_helpers import QuestionRequest
+
+from lib.prompts import load_prompt
 
 @router.post("/ask")
 def get_response_from_ai(request: QuestionRequest):
-    answer = get_llm_response(request.question)
+    prompts = load_prompt("ai_ask")
+    user_prompt = prompts["user"].replace("{{ question }}", request.question)
+    answer = get_llm_response(
+        system_prompt=prompts["system"],
+        user_prompt=user_prompt
+    )
     return {"answer": answer.choices[0].message.content}

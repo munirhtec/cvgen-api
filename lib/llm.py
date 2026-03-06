@@ -63,7 +63,7 @@ def get_llm_response(
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
     ]
-
+    print(f"🤖 [LLM] Requesting model: {model_name} (Temp: {temperature})")
     if response_model:
         # Inject schema into prompt for reliable JSON generation
         schema = response_model.model_json_schema()
@@ -81,17 +81,21 @@ def get_llm_response(
                 response_format={"type": "json_object"},
             )
             content = response.choices[0].message.content
+            print(f"📥 [LLM] Received {len(content)} chars.")
             parsed = response_model.model_validate_json(content)
             # Mock the 'parsed' attribute logic from beta client
             response.parsed = parsed
             return response
         except Exception as e:
-            print(f"Structured output error: {e}")
+            print(f"💥 [LLM] Structured output error: {e}")
             raise e
 
-    return client.chat.completions.create(
+    print(f"🤖 [LLM] Raw message sent: {messages[1]['content'][:50]}...")
+    response = client.chat.completions.create(
         model=model_name,
         messages=messages,
         temperature=temperature,
         top_p=top_p,
     )
+    print(f"📥 [LLM] Raw response received.")
+    return response

@@ -53,8 +53,11 @@ system: |
   NO explanations, NO markdown, NO comments.
 
 user: |
+  ORIGINAL EMPLOYEE RECORD (source of truth — use for fact-checking):
+  {{ employee_record }}
+
   CV DRAFT:
   {{ cv_draft }}
-  
-  USER FEEDBACK:
+
+  FEEDBACK / INSTRUCTIONS:
   {{ feedback }}

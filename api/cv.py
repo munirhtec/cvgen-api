@@ -4,96 +4,60 @@ from fastapi import APIRouter, HTTPException
 from typing import Dict
 from services.rag_faiss import find_employee
 from services.agents import DraftingAgent, ReviewAgent, RefinementAgent
+from fastapi.responses import StreamingResponse
+import json
+import asyncio
+import queue
 
 router = APIRouter()
-pipelines: Dict[str, "CVPipeline"] = {}
-
-class CVPipeline:
-    def __init__(self, employee_record):
-        self.employee_id = str(employee_record["employee_id"])
-        self.original_record = copy.deepcopy(employee_record)
-        self.cv = None
-        self.feedback_history = []
-        self.last_feedback = ""
-        self.drafting_agent = DraftingAgent()
-        self.review_agent = ReviewAgent()
-        self.refinement_agent = RefinementAgent()
-
-    def draft(self):
-        self.cv = self.drafting_agent.generate(self.original_record)
-        return self.cv
-
-    def review(self):
-        self.cv = self.review_agent.review(self.cv)
-        return self.cv
-
-    def refine(self):
-        self.cv = self.refinement_agent.refine(self.cv, self.original_record)
-        return self.cv
-
-    def add_feedback(self, feedback_item: str):
-        self.feedback_history.append(feedback_item)
-        self.last_feedback = feedback_item
-
-        if not self.cv:
-            self.draft()
-
-        self.cv = self.review_agent.review(self.cv, feedback_item)
-
-        # self.cv = self.refinement_agent.refine(self.cv, self.original_record)
-
-        # Update lastFeedback and feedbackHistory
-        self.cv["lastFeedback"] = self.last_feedback
-        self.cv["feedbackHistory"] = self.feedback_history
-
-    def reset(self):
-        self.cv = None
-        self.feedback_history = []
-        self.last_feedback = ""
+from services.cv_service import create_pipeline, get_pipeline, pipelines
 
 # FastAPI routes
 @router.post("/start/{employee_query}")
-def start_cv(employee_query: str):
-    """
-    Start CV generation with AUTOMATED 3-AGENT PIPELINE.
-    
-    This endpoint automatically runs the CV through all 3 agents:
-    1. DraftingAgent: Creates initial CV from employee data
-    2. ReviewAgent: Fact-checks and validates (anti-hallucination)
-    3. RefinementAgent: Final polish and quality assurance
-    
-    This reduces hallucinations and improves overall quality.
-    """
+async def start_cv(employee_query: str):
     employee = find_employee(employee_query)
     if not employee:
         raise HTTPException(status_code=404, detail="Employee not found")
     
-    pipeline = CVPipeline(employee)
-    pipelines[str(employee["employee_id"])] = pipeline
+    pipeline = create_pipeline(employee)
+    pipeline_queue = queue.Queue()
     
-    # AUTOMATED 3-AGENT PIPELINE
-    print(f"🚀 Starting automated CV generation for {employee.get('full_name', 'Unknown')}")
-    
-    # Step 1: Draft
-    print("  📝 Step 1/3: Drafting...")
-    draft_result = pipeline.draft()
-    
-    # Step 2: Review (fact-checking, anti-hallucination)
-    print("  🔍 Step 2/3: Reviewing and fact-checking...")
-    reviewed_result = pipeline.review()
-    
-    # Step 3: Refine (final quality assurance)
-    print("  ✨ Step 3/3: Refining...")
-    final_result = pipeline.refine()
-    
-    print(f"  ✅ CV generation complete!")
-    
-    return {
-        "message": "CV generated through 3-agent pipeline (draft → review → refine)",
-        "employee_id": pipeline.employee_id,
-        "draft": final_result,
-        "pipeline_stages": ["drafting", "review", "refinement"]
-    }
+    def log_cb(msg):
+        pipeline_queue.put({"type": "message", "data": msg})
+
+    async def process_generator():
+        yield json.dumps({"type": "message", "data": f"🚀 Starting automated CV generation for {employee.get('full_name', 'Unknown')}"}) + "\n"
+        
+        loop = asyncio.get_event_loop()
+        
+        def run_pipeline():
+            try:
+                pipeline.draft(log_cb=log_cb)
+                pipeline.review(log_cb=log_cb)
+                final_result = pipeline.refine(log_cb=log_cb)
+                
+                pipeline_queue.put({
+                    "type": "done",
+                    "message": "CV generated through 3-agent pipeline",
+                    "employee_id": pipeline.employee_id,
+                    "draft": final_result,
+                    "pipeline_stages": ["drafting", "review", "refinement"]
+                })
+            except Exception as e:
+                pipeline_queue.put({"type": "error", "message": str(e)})
+
+        task = loop.run_in_executor(None, run_pipeline)
+        
+        while True:
+            try:
+                msg = pipeline_queue.get_nowait()
+                yield json.dumps(msg) + "\n"
+                if msg["type"] in ["done", "error"]:
+                    break
+            except queue.Empty:
+                await asyncio.sleep(0.1)
+                
+    return StreamingResponse(process_generator(), media_type="application/x-ndjson")
 
 
 @router.get("/draft/{employee_id}")
@@ -120,19 +84,47 @@ def refine_cv(employee_id: str):
     return pipeline.refine()
 
 
-class FeedbackRequest(BaseModel):
-    employee_id: str
-    feedback: str
+from models.api_cv import FeedbackRequest
 
 @router.post("/feedback")
-def submit_feedback(request: FeedbackRequest):
-    pipeline = pipelines.get(request.employee_id)
+async def submit_feedback(request: FeedbackRequest):
+    pipeline = get_pipeline(request.employee_id)
     if not pipeline:
         raise HTTPException(status_code=404, detail="No active pipeline")
     
-    # Add feedback, which will overwrite the feedback in the current draft
-    pipeline.add_feedback(request.feedback)
-    return {"success": True, "message": "Feedback applied", "draft": pipeline.cv}
+    pipeline_queue = queue.Queue()
+    
+    def log_cb(msg):
+        pipeline_queue.put({"type": "message", "data": msg})
+        
+    async def process_generator():
+        yield json.dumps({"type": "message", "data": f"🚀 Processing feedback: '{request.feedback}'"}) + "\n"
+        
+        loop = asyncio.get_event_loop()
+        def run_pipeline():
+            try:
+                pipeline.add_feedback(request.feedback, log_cb=log_cb)
+                pipeline_queue.put({
+                    "type": "done",
+                    "success": True, 
+                    "message": "Feedback applied", 
+                    "draft": pipeline.cv
+                })
+            except Exception as e:
+                pipeline_queue.put({"type": "error", "message": str(e)})
+
+        task = loop.run_in_executor(None, run_pipeline)
+        
+        while True:
+            try:
+                msg = pipeline_queue.get_nowait()
+                yield json.dumps(msg) + "\n"
+                if msg["type"] in ["done", "error"]:
+                    break
+            except queue.Empty:
+                await asyncio.sleep(0.1)
+
+    return StreamingResponse(process_generator(), media_type="application/x-ndjson")
     
 
 @router.post("/reset/{employee_id}")
